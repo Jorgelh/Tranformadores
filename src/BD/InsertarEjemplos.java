@@ -96,7 +96,7 @@ public class InsertarEjemplos {
     
 public static ArrayList<ClassTrabajos> ListarProcesoEjemplos(int a) {
                    
-        return SQL1("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE') AS DEPTO from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
+        return SQL1("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS') AS DEPTO from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
     }
     private static ArrayList<ClassTrabajos> SQL1(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -186,7 +186,7 @@ public static ClassTrabajos buscarEjemploTrabajo(int a) throws SQLException{
     
     public static ArrayList<ClassTrabajos> ListarProcesoEjemplo(int a) {
                    
-        return Ejemplo("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE') AS DEPTO from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
+        return Ejemplo("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS') AS DEPTO from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
     }
     private static ArrayList<ClassTrabajos> Ejemplo(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();

@@ -229,7 +229,7 @@ public class InsertTrabajosTransformadores {
 
     public static ArrayList<ClassTrabajos> ListarProceso(int a) {
                    
-        return SQL1("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'ANA') AS DEPTO from procesos where id_lote="+a+" order by id_proceso");
+        return SQL1("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS') AS DEPTO from procesos where id_lote="+a+" order by id_proceso");
     }
     private static ArrayList<ClassTrabajos> SQL1(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();

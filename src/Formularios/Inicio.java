@@ -116,6 +116,12 @@ public class Inicio extends javax.swing.JFrame {
             aprobacionejemplo.setEnabled(true);
             //aprobacionejemplo.setEnabled(true);
         }
+        else if (depto == 11)//GERENCIA
+        {
+            procesos.setEnabled(true);
+            procesoejemplo.setEnabled(true);
+            
+        }
         
     }
 
@@ -428,11 +434,15 @@ public class Inicio extends javax.swing.JFrame {
         else if(a.equals("taller")){
             depto = 10;
         }//TALLER
-        else if(a.equals("sotano")){
+        else if(a.equals("Sotano")){
             depto = 10;
         }//TALLER
         else if(a.equals("apacheco")){
             depto = 11;
+            
+        }
+        else if(a.equals("deptochips")){
+            depto = 12;
             
         }
         
