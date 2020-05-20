@@ -47,7 +47,7 @@ public class InsertarEjemplos {
     public static void InsertarProcesoEjemplo(ClassTrabajos t) throws SQLException{
         Connection con = BD.getConnection();
         PreparedStatement ps = null;
-        ps = con.prepareStatement("insert into ejemplos_procesos(id_proceso,id,proceso,comentarios,fechaauto,fecha,cantidad,fechasys,depto) values(ID_PROCESO_EJEMPLO.nextval,?,?,?,?,?,?,sysdate,?)");
+        ps = con.prepareStatement("insert into ejemplos_procesos(id_proceso,id,proceso,comentarios,fechaauto,fecha,cantidad,fechasys,depto,nota) values(ID_PROCESO_EJEMPLO.nextval,?,?,?,?,?,?,sysdate,?,?)");
         //ps.setInt(1,t.getId_proceso());
         ps.setInt(1, t.getId());
         ps.setString(2, t.getProceso());
@@ -56,6 +56,7 @@ public class InsertarEjemplos {
         ps.setDate(5,new java.sql.Date(t.getFecha1().getTime()));
         ps.setInt(6, t.getCantidad());
         ps.setInt(7, t.getDepartamento());
+        ps.setString(8, t.getNota());
         ps.executeUpdate();
         con.close();
         ps.close(); 
@@ -186,7 +187,7 @@ public static ClassTrabajos buscarEjemploTrabajo(int a) throws SQLException{
     
     public static ArrayList<ClassTrabajos> ListarProcesoEjemplo(int a) {
                    
-        return Ejemplo("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS') AS DEPTO from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
+        return Ejemplo("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS') AS DEPTO, nota from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
     }
     private static ArrayList<ClassTrabajos> Ejemplo(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -202,6 +203,7 @@ public static ClassTrabajos buscarEjemploTrabajo(int a) throws SQLException{
                  b.setCantidad(rs.getInt("cantidad"));
                  b.setComentarios(rs.getString("comentarios"));
                  b.setDepto(rs.getString("depto"));
+                 b.setNota(rs.getString("nota"));
                  list.add(b);
             }
             cn.close();

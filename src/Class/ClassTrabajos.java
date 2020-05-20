@@ -39,7 +39,16 @@ public class ClassTrabajos {
     private int prioridad;
     private String prioridadStrin;
     private String estado;
+    private String Nota;
 
+    public String getNota() {
+        return Nota;
+    }
+
+    public void setNota(String Nota) {
+        this.Nota = Nota;
+    }
+    
     public String getEstado() {
         return estado;
     }

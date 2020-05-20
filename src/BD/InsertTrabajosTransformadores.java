@@ -107,7 +107,7 @@ public class InsertTrabajosTransformadores {
     }
     
     public static ArrayList<ClassTrabajos> ListarTraIniciadosTras(String a , String b) {
-        return SQL2("select loteS.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,trabajo.nolotes,trabajo.qtyproduccion,lotes.cantidad as QTYPORLOTE,lotes.nolote FROM TRABAJO inner join lotes on trabajo.id = lotes.id WHERE UPPER(TRABAJO.PN) LIKE UPPER('"+a+"%') and UPPER(TRABAJO.JOB) LIKE UPPER('"+b+"%') and LOTES.estado = 1 and LOTES.fechainicio IS NOT null order by TRABAJO.PN,LOTES.NOLOTE" );
+        return SQL2("select loteS.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,trabajo.nolotes,trabajo.qtyproduccion,lotes.cantidad as QTYPORLOTE,lotes.nolote FROM TRABAJO inner join lotes on trabajo.id = lotes.id WHERE UPPER(TRABAJO.PN) LIKE UPPER('"+a+"%') and UPPER(TRABAJO.JOB) LIKE UPPER('"+b+"%') and LOTES.estado = 1 and LOTES.fechainicio IS NOT null order by TRABAJO.PN,lotes.id_lote,LOTES.NOLOTE" );
     }
     
     public static ArrayList<ClassTrabajos> ListarTraIniciadosTrasEdit(String a , String b) {

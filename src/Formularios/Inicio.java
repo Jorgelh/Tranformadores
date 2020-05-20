@@ -23,7 +23,7 @@ import Formularios.EditarCantidadLotes;
  */
 public class Inicio extends javax.swing.JFrame {
 
-    int depto =20;
+    int depto;
 
     /**
      * Creates new form Inicio
@@ -116,7 +116,7 @@ public class Inicio extends javax.swing.JFrame {
             aprobacionejemplo.setEnabled(true);
             //aprobacionejemplo.setEnabled(true);
         }
-        else if (depto == 11)//GERENCIA
+        else if (depto == 12)//GERENCIA
         {
             procesos.setEnabled(true);
             procesoejemplo.setEnabled(true);
@@ -439,7 +439,6 @@ public class Inicio extends javax.swing.JFrame {
         }//TALLER
         else if(a.equals("apacheco")){
             depto = 11;
-            
         }
         else if(a.equals("deptochips")){
             depto = 12;
