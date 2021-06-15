@@ -40,7 +40,28 @@ public class ClassTrabajos {
     private String prioridadStrin;
     private String estado;
     private String Nota;
+    private String Descripcion;
+    private int estadoeje;
 
+    public int getEstadoeje() {
+        return estadoeje;
+    }
+
+    public void setEstadoeje(int estadoeje) {
+        this.estadoeje = estadoeje;
+    }
+    
+   
+
+    public String getDescripcion() {
+        return Descripcion;
+    }
+
+    public void setDescripcion(String Descripcion) {
+        this.Descripcion = Descripcion;
+    }
+
+    
     public String getNota() {
         return Nota;
     }

@@ -110,8 +110,15 @@ public class InsertTrabajosTransformadores {
         return SQL2("select loteS.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,trabajo.nolotes,trabajo.qtyproduccion,lotes.cantidad as QTYPORLOTE,lotes.nolote FROM TRABAJO inner join lotes on trabajo.id = lotes.id WHERE UPPER(TRABAJO.PN) LIKE UPPER('"+a+"%') and UPPER(TRABAJO.JOB) LIKE UPPER('"+b+"%') and LOTES.estado = 1 and LOTES.fechainicio IS NOT null order by TRABAJO.PN,lotes.id_lote,LOTES.NOLOTE" );
     }
     
+    public static ArrayList<ClassTrabajos> ListarTrabajosSolicitudesMat(String a) {
+        return SQL2("select loteS.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,trabajo.nolotes,trabajo.qtyproduccion,lotes.cantidad as QTYPORLOTE,lotes.nolote FROM TRABAJO inner join lotes on trabajo.id = lotes.id WHERE UPPER(TRABAJO.PN) LIKE UPPER('"+a+"%') and LOTES.estado = 1 order by TRABAJO.PN,lotes.id_lote,LOTES.NOLOTE" );
+    }
+    
     public static ArrayList<ClassTrabajos> ListarTraIniciadosTrasEdit(String a , String b) {
         return SQL2("select loteS.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,trabajo.nolotes,trabajo.qtyproduccion,lotes.cantidad as QTYPORLOTE,lotes.nolote FROM TRABAJO inner join lotes on trabajo.id = lotes.id WHERE UPPER(TRABAJO.PN) LIKE UPPER('"+a+"%') and UPPER(TRABAJO.JOB) LIKE UPPER('"+b+"%') and LOTES.estado = 1 and LOTES.fechainicio IS null order by TRABAJO.PN,LOTES.NOLOTE" );
+    }
+    public static ArrayList<ClassTrabajos> ListarTrabajosPrioridad(String a , String b) {
+        return SQL2("select loteS.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,trabajo.nolotes,trabajo.qtyproduccion,lotes.cantidad as QTYPORLOTE,lotes.nolote FROM TRABAJO inner join lotes on trabajo.id = lotes.id WHERE UPPER(TRABAJO.PN) LIKE UPPER('"+a+"%') and UPPER(TRABAJO.JOB) LIKE UPPER('"+b+"%') and LOTES.estado = 1 and LOTES.fechainicio IS not null order by TRABAJO.PN,LOTES.NOLOTE" );
     }
     private static ArrayList<ClassTrabajos> SQL2(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -151,7 +158,7 @@ public class InsertTrabajosTransformadores {
              
             Connection cn = BD.getConnection();
             PreparedStatement ps = null;
-            ps = cn.prepareStatement("select lotes.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,lotes.nolote,lotes.cantidad,decode(LOTES.PRIORIDAD,0,'',1,'URGENTE') as PRIORIDAD from trabajo inner join lotes on trabajo.id = lotes.id where lotes.ID_LOTE ="+a);
+            ps = cn.prepareStatement("select lotes.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,lotes.nolote,lotes.cantidad,decode(LOTES.PRIORIDAD,0,'',1,'URGENTE') as PRIORIDAD, trabajo.nolotes from trabajo inner join lotes on trabajo.id = lotes.id where lotes.ID_LOTE ="+a);
             ResultSet rs = ps.executeQuery();
             if (rs.next())
             {
@@ -168,6 +175,7 @@ public class InsertTrabajosTransformadores {
                c.setNOLOTE(rs.getInt("nolote"));
                c.setQTYPORLOTE(rs.getInt("cantidad"));
                c.setPrioridadStrin(rs.getString("PRIORIDAD"));
+               c.setQTYDELOTES(rs.getInt("nolotes"));
             }
             cn.close();
             ps.close();
@@ -229,7 +237,7 @@ public class InsertTrabajosTransformadores {
 
     public static ArrayList<ClassTrabajos> ListarProceso(int a) {
                    
-        return SQL1("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS') AS DEPTO from procesos where id_lote="+a+" order by id_proceso");
+        return SQL1("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS',13,'MOLDING') AS DEPTO from procesos where id_lote="+a+" order by id_proceso");
     }
     private static ArrayList<ClassTrabajos> SQL1(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -285,9 +293,6 @@ public class InsertTrabajosTransformadores {
         }
     }
     
-    
-    
-        
         
         public static ArrayList<ClassTrabajos> ListarTrabajoIniciar(String a , String b) {
         return SQLListas("select loteS.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,lotes.cantidad as QTYPORLOTE,lotes.nolote FROM TRABAJO inner join lotes on trabajo.id = lotes.id\n" +
@@ -329,8 +334,10 @@ public class InsertTrabajosTransformadores {
         
         Connection cn = BD.getConnection();
         PreparedStatement ps = null;
-        ps = cn.prepareStatement("UPDATE EJEMPLOS_TRABAJO SET ESTADO = 2, FECHAFIN = ? WHERE ID ="+t.getNo());
-        ps.setDate(1,new java.sql.Date(t.getFecha().getTime()));    
+        ps = cn.prepareStatement("UPDATE EJEMPLOS_TRABAJO SET ESTADO = ?, FECHAFIN = ?, COMENTARIOS = ? WHERE ID ="+t.getNo());
+        ps.setInt(1, t.getEstado());
+        ps.setDate(2,new java.sql.Date(t.getFecha().getTime())); 
+        ps.setString(3, t.getNota());
         int rowsUpdated = ps.executeUpdate();
         cn.close();
         ps.close();
@@ -376,10 +383,29 @@ public class InsertTrabajosTransformadores {
         
         Connection cn = BD.getConnection();
         PreparedStatement ps = null;
-        ps = cn.prepareStatement("UPDATE LOTES SET CANTIDAD = ?,  PRIORIDAD = ?, NOTA = ? WHERE ID_LOTE ="+t.getId());
+        ps = cn.prepareStatement("UPDATE LOTES SET PRIORIDAD = ?, NOTA = ? WHERE ID_LOTE ="+t.getId());
         //ps.setDate(1,new java.sql.Date(t.getFecha().getTime())); 
-        ps.setInt(1, t.getQTYPORLOTE());
-        ps.setInt(2, t.getPrioridad());
+        ps.setInt(1, t.getPrioridad());
+        ps.setString(2, t.getComentarios());
+        int rowsUpdated = ps.executeUpdate();
+        cn.close();
+        ps.close();
+        if (rowsUpdated > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }  
+    
+    
+    public static boolean EditarNodeLoteO(ClassTrabajos t) throws SQLException{
+        
+        Connection cn = BD.getConnection();
+        PreparedStatement ps = null;
+        ps = cn.prepareStatement("UPDATE LOTES SET PRIORIDAD = ?,CANTIDAD = ? , NOTA = ? WHERE ID_LOTE ="+t.getId());
+        //ps.setDate(1,new java.sql.Date(t.getFecha().getTime())); 
+        ps.setInt(1, t.getPrioridad());
+        ps.setInt(2, t.getQTYPORLOTE());
         ps.setString(3, t.getComentarios());
         int rowsUpdated = ps.executeUpdate();
         cn.close();
@@ -389,8 +415,120 @@ public class InsertTrabajosTransformadores {
         } else {
             return false;
         }
-    }    
+    }  
     
     
+    
+    
+     public static ArrayList<ClassTrabajos> ListarProductos(int a) {
+        return SQpro("select ID_PRODUCTO,DESCRIPCION from productos_taller where depto ="+a );
+    }
+    private static ArrayList<ClassTrabajos> SQpro(String sql){
+    ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
+    Connection cn = BD.getConnection();
+        try {
+            ClassTrabajos t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ClassTrabajos();
+                 t.setId(rs.getInt("ID_PRODUCTO"));
+                 t.setDescripcion(rs.getString("DESCRIPCION"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list;
+    }  
+    public static ArrayList<ClassTrabajos> ListarProductosYaSolicitados(int a,int b) {
+        return SQpedidos("SELECT p.id_producto as ID_PRODUCTO ,t.descripcion as DESCRIPCION,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as fecha, p.cantidad FROM PEDIDOS_TRABAJOS P INNER JOIN productos_taller T ON p.id_producto = t.id_producto WHERE P.ID_LOTE ="+a+" and estado in(0,1)  and p.depto ="+b); 
+    }
+    private static ArrayList<ClassTrabajos> SQpedidos(String sql){
+    ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
+    Connection cn = BD.getConnection();
+        try {
+            ClassTrabajos t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ClassTrabajos();
+                 t.setId(rs.getInt("ID_PRODUCTO"));
+                 t.setDescripcion(rs.getString("DESCRIPCION"));
+                 t.setFecha(rs.getString("fecha"));
+                 t.setCantidad(rs.getInt("cantidad"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list;
+    }  
+    
+public static ArrayList<ClassTrabajos> ListarProductosYaSolicitadosEjemplo(int a,int b) {
+        return SQpedidosE("SELECT p.id_producto as ID_PRODUCTO ,t.descripcion as DESCRIPCION,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as fecha,p.cantidad FROM PEDIDOS_TRABAJOS P INNER JOIN productos_taller T ON p.id_producto = t.id_producto WHERE  p.id ="+a+"  and p.depto ="+b); 
+    }
+    private static ArrayList<ClassTrabajos> SQpedidosE(String sql){
+    ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
+    Connection cn = BD.getConnection();
+        try {
+            ClassTrabajos t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ClassTrabajos();
+                 t.setId(rs.getInt("ID_PRODUCTO"));
+                 t.setDescripcion(rs.getString("DESCRIPCION"));
+                 t.setFecha(rs.getString("fecha"));
+                 t.setCantidad(rs.getInt("cantidad"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list;
+    } 
+    
+    
+    
+    
+    public static ArrayList<ClassTrabajos> ListarTrabajosporDepto(String a) {
+        return SQLDepto("select p.id_lote,upper(p.proceso)as proceso,p.fechaauto,l.nolote,l.cantidad,t.pn,t.job,decode(l.prioridad,1,'URGENTE') as prioridad from procesos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on l.id = t.id\n" +
+"where p.id_proceso in(select max(p.id_proceso) as id_proceso from lotes l INNER join procesos p on l.id_lote = p.id_lote join trabajo t on l.id = t.id where l.estado = 1  GROUP BY (l.id_lote)) and\n" +
+"upper (p.proceso) like upper('"+a+"%') order by t.pn,l.nolote");
+    }
+    
+    private static ArrayList<ClassTrabajos> SQLDepto(String sql){
+    ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
+    Connection cn = BD.getConnection();
+        try {
+            ClassTrabajos t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ClassTrabajos();
+                 t.setId(rs.getInt("ID_LOTE"));
+                 t.setPN(rs.getString("PN"));
+                 t.setJob(rs.getString("JOB"));
+                 t.setProceso(rs.getString("PROCESO"));
+                 t.setNOLOTE(rs.getInt("NOLOTE"));
+                 t.setFecha(rs.getString("FECHAAUTO"));
+                 t.setCantidad(rs.getInt("CANTIDAD"));
+                 t.setPrioridadStrin(rs.getString("PRIORIDAD"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta TEAS "+e);
+            return null;
+        } 
+        return list;
+}    
     
 }

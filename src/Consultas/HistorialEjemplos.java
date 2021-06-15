@@ -171,7 +171,7 @@ public class HistorialEjemplos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_TaHistorialMouseClicked
 
      private void ListarTrabajosHistorial(){
-        ArrayList<ClassTrabajos> result = InsertarEjemplos.ListarHistorialEjemplos(PN.getText());
+        ArrayList<ClassTrabajos> result = InsertarEjemplos.ListarHistorialEjemplosCerrados(PN.getText());
         RecargarTabla(result);  
     }
      private void RecargarTabla(ArrayList<ClassTrabajos> list) {

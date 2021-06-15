@@ -102,7 +102,9 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
         else if (a.equals("taller")){depto=10;}//TALLE
         else if (a.equals("Sotano")){depto=10;}//SOTANO
         else if (a.equals("apacheco")){depto=11;}//RELACION CON EL CLIENTE  
-        else if (a.equals("deptochips")){depto=12;}//RELACION CON EL CLIENTE     
+        else if (a.equals("deptochips")){depto=12;}//RELACION CON EL CLIENTE  
+        else if (a.equals("molding")){depto = 13;}//DEPARTAMENTO DE MOLDING
+        else if (a.equals("marking")){depto = 2;}//Maquina de Marking     
    }
  
     
@@ -128,6 +130,7 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         PRIORIDAD = new javax.swing.JTextField();
+        ejemploaprobado = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         REVISIONINFO = new javax.swing.JTextField();
@@ -243,6 +246,9 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
         PRIORIDAD.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         PRIORIDAD.setForeground(new java.awt.Color(255, 0, 0));
 
+        ejemploaprobado.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        ejemploaprobado.setForeground(new java.awt.Color(255, 51, 51));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -253,7 +259,8 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
                     .addComponent(PRIORIDAD, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel10)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(ejemploaprobado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -263,7 +270,9 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PRIORIDAD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(ejemploaprobado, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -850,6 +859,7 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField PROCESO;
     private javax.swing.JTextField REVISIONINFO;
     private javax.swing.JTable TablaPro;
+    private javax.swing.JLabel ejemploaprobado;
     private javax.swing.JTextField fechaAuto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -895,6 +905,8 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
             REVISIONINFO.setText(c.getRevision());
             PRIORIDAD.setText(c.getPrioridadStrin());
             PROCESO.requestFocus();
+            if(c.getEstadoeje()==3 || c.getEstadoeje()==4){ejemploaprobado.setText("EJEMPLO YA APROBADO");}
+            System.out.println("ESTADO = "+c.getEstadoeje());
             ListarProcesos();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "error"+e);

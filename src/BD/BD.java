@@ -23,8 +23,8 @@ public class BD {
             String url = "jdbc:oracle:thin:@192.168.0.2:1521:orcl";
             String user = "transformadores";
             String password = "campana";
-            /* String url = "jdbc:oracle:thin:@192.168.0.16:1521:orcl";
-          String user = "testing";
+            /*String url = "jdbc:oracle:thin:@192.168.0.39:1521:xe";
+            String user = "transformadores";
             String password = "campana";*/
             cn= DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException e) {

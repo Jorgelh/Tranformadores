@@ -31,6 +31,8 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
     int id_proceso;
     int n;
     int depto;
+    int estado;
+    int estadoviene;
     DefaultTableModel temp;
     /**
      * Creates new form Recoridos
@@ -85,8 +87,7 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
         CANTIDADINFO.setText("");
         FECHA.setDate(null);
         comentario.setText("");
-    
-    
+        chekejemplo.setSelected(false);
     }
     
     public void FechasJdate() {
@@ -115,35 +116,34 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
         else if (a.equals("ingenieria")){depto=7;}//RELACION CON EL CLIENTE     
    }
    
-   
+   public void ejemploincompleto(){
+       
+       
+       if(chekejemplo.isSelected()==true){estado = 3;}else{estado = 2;} 
+   }
    
    public void aprobacion(){
    
-       
          if(id !=0 && FECHA.getDate()!=null){
-            
              int resp=JOptionPane.showConfirmDialog(null,"Desea Aprobar la Orden");
           if (JOptionPane.OK_OPTION == resp){
-          
         CerrararTra m = new CerrararTra();
+        if(estadoviene == 4){estado = 5;}else{ejemploincompleto();}
         try {
-            
            m.setNo(id);
            m.setFecha(FECHA.getDate());
+           m.setNota(comentario.getText());
+           m.setEstado(estado);
            InsertTrabajosTransformadores.AprobarEjemplo(m);
            JOptionPane.showMessageDialog(null, "Trabajo Aprobado Correctamente");
            limpiar();
            LimpirTablaPro();
            ListarTrabajos();
-           
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "MENSAJE"+e);
-        
         }
           }
         }else{JOptionPane.showMessageDialog(null, "Ingrese Una Fecha o Seleccione Un Trabajo");}
-   
-   
    }
  
     
@@ -191,6 +191,7 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         comentario = new javax.swing.JTextArea();
         guardar = new javax.swing.JButton();
+        chekejemplo = new javax.swing.JCheckBox();
 
         setClosable(true);
         setTitle("APROBACION DE EJEMPLOS");
@@ -448,7 +449,7 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
+                .addContainerGap(13, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -479,6 +480,9 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
             }
         });
 
+        chekejemplo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        chekejemplo.setText("EJEMPLO INCOMPLETO");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -487,17 +491,16 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(FECHA, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
+                    .addComponent(jLabel9)
+                    .addComponent(chekejemplo))
                 .addGap(51, 51, 51)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel11)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(guardar)
-                        .addGap(57, 57, 57))))
+                        .addGap(46, 46, 46)
+                        .addComponent(guardar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -506,18 +509,17 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(25, 25, 25)
-                                .addComponent(guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(FECHA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(FECHA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(chekejemplo)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -542,7 +544,7 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -557,7 +559,7 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -641,8 +643,6 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
                  return false;
              }
              });
-             
-             
 }
      
     private void ListarProcesos(){
@@ -734,6 +734,7 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField PRIORIDAD;
     private javax.swing.JTextField REVISIONINFO;
     private javax.swing.JTable TablaPro;
+    private javax.swing.JCheckBox chekejemplo;
     private javax.swing.JTextArea comentario;
     private javax.swing.JButton guardar;
     private javax.swing.JLabel jLabel1;
@@ -773,6 +774,7 @@ public class AprobacionEjemplos extends javax.swing.JInternalFrame {
             CANTIDADINFO.setText(String.valueOf(c.getQtyproduccion()));
             REVISIONINFO.setText(c.getRevision());
             PRIORIDAD.setText(c.getPrioridadStrin());
+            estadoviene = c.getEstadoeje();
             ListarProcesos();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "error"+e);

@@ -140,11 +140,12 @@ public class EjemplosAprobadosParaTrabajos extends javax.swing.JInternalFrame {
 
     private void TaHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TaHistorialMouseClicked
         int id;
+        String estado;
         id = (Integer.parseInt(String.valueOf(TaHistorial.getModel().getValueAt(TaHistorial.getSelectedRow(), 0))));
-                
+        estado = (String.valueOf(TaHistorial.getModel().getValueAt(TaHistorial.getSelectedRow(), 8)));        
         if (evt.getClickCount() > 1) {
             
-        NuevoTrabajoTrans tra = new NuevoTrabajoTrans(id);
+        NuevoTrabajoTrans tra = new NuevoTrabajoTrans(id,estado);
         Pane1.add(tra);
         Dimension desktopSize = Pane1.getSize();
         Dimension FrameSize = tra.getSize();
@@ -164,9 +165,10 @@ public class EjemplosAprobadosParaTrabajos extends javax.swing.JInternalFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         int id;
+        String estado;
         id = 0;//(Integer.parseInt(String.valueOf(TaHistorial.getModel().getValueAt(TaHistorial.getSelectedRow(), 0))));
-          
-        NuevoTrabajoTrans tra = new NuevoTrabajoTrans(id);
+        estado = "";  
+        NuevoTrabajoTrans tra = new NuevoTrabajoTrans(id,estado);
         Pane1.add(tra);
         Dimension desktopSize = Pane1.getSize();
         Dimension FrameSize = tra.getSize();
@@ -188,7 +190,7 @@ public class EjemplosAprobadosParaTrabajos extends javax.swing.JInternalFrame {
     }
      private void RecargarTabla(ArrayList<ClassTrabajos> list) {
          
-              Object[][] datos = new Object[list.size()][8];
+              Object[][] datos = new Object[list.size()][9];
               int i = 0;
               for(ClassTrabajos t : list)
               {
@@ -200,12 +202,13 @@ public class EjemplosAprobadosParaTrabajos extends javax.swing.JInternalFrame {
                   datos[i][5] = t.getRevision();
                   datos[i][6] = t.getComentarios();
                   datos[i][7] = t.getFecha();
+                  datos[i][8] = t.getEstado();
                   i++;
               }    
              TaHistorial.setModel(new javax.swing.table.DefaultTableModel(
                 datos,
                 new String[]{
-                "No.","P/N","JOB","CLIENTE","ESTANDAR","REVISION","COMENTARIO","FECHA APROBACION"
+                "No.","P/N","JOB","CLIENTE","ESTANDAR","REVISION","COMENTARIO","FECHA APROBACION","ESTADO"
  
              })
              {  

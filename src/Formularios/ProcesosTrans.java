@@ -67,7 +67,7 @@ public class ProcesosTrans extends javax.swing.JInternalFrame {
          DateFormat dateFormat = new SimpleDateFormat("dd/MM/YY HH:mm:ss");
          Calendar cal = Calendar.getInstance();
          fechaAuto.setText(dateFormat.format(cal.getTime()));
-}      
+        }      
     
    public void limpiarproce(){
        
@@ -100,7 +100,10 @@ public class ProcesosTrans extends javax.swing.JInternalFrame {
         else if (a.equals("taller")){depto=10;}//TALLE
         else if (a.equals("Sotano")){depto=10;}//SOTANO
         else if (a.equals("apacheco")){depto=11;}//RELACION CON EL CLIENTE 
-        else if (a.equals("deptochips")){depto=12;}//RELACION CON EL CLIENTE      
+        else if (a.equals("deptochips")){depto=12;}//RELACION CON EL CLIENTE   
+        else if (a.equals("molding")){depto = 13;}//DEPARTAMENTO DE MOLDING
+        else if (a.equals("marking")){depto = 2;}//Maquina de Marking
+             
    }
  
     
@@ -927,7 +930,7 @@ public class ProcesosTrans extends javax.swing.JInternalFrame {
             ESTANDARINFO.setText(c.getEstandar());
             CANTIDADINFO.setText(String.valueOf(c.getQTYPORLOTE()));
             REVISIONINFO.setText(c.getRevision());
-            nolote.setText(String.valueOf(c.getNOLOTE()));
+            nolote.setText(String.valueOf(c.getNOLOTE()+"/"+c.getQTYDELOTES()));
             PROCESO.requestFocus();
             PRIORIDAD.setText(c.getPrioridadStrin());
             ListarProcesos();

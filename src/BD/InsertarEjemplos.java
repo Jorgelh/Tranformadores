@@ -65,7 +65,7 @@ public class InsertarEjemplos {
     
     
     public static ArrayList<ClassTrabajos> ListarEjemplos(String a , String b) {
-        return SQL2("select ID,PN,JOB,CLIENTE,decode(ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR ,REVISION,QTYPRODUCCION FROM EJEMPLOS_TRABAJO WHERE UPPER(PN) LIKE UPPER('"+a+"%') and UPPER(JOB) LIKE UPPER('"+b+"%') and estado = 1 order by id" );
+        return SQL2("select ID,PN,JOB,CLIENTE,decode(ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR ,REVISION,QTYPRODUCCION FROM EJEMPLOS_TRABAJO WHERE UPPER(PN) LIKE UPPER('"+a+"%') and UPPER(JOB) LIKE UPPER('"+b+"%') and estado in (1,3,4)  order by id" );
     }
     private static ArrayList<ClassTrabajos> SQL2(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -97,7 +97,7 @@ public class InsertarEjemplos {
     
 public static ArrayList<ClassTrabajos> ListarProcesoEjemplos(int a) {
                    
-        return SQL1("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS') AS DEPTO from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
+        return SQL1("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS',13,'MOLDING') AS DEPTO from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
     }
     private static ArrayList<ClassTrabajos> SQL1(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -131,7 +131,7 @@ public static ArrayList<ClassTrabajos> ListarProcesoEjemplos(int a) {
              
             Connection cn = BD.getConnection();
             PreparedStatement ps = null;
-            ps = cn.prepareStatement("select id,pn,job,cliente,decode(estandar,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as estandar,qtyproduccion,revision,decode(PRIORIDAD,0,' ',1,'URGENTE') AS PRIORIDAD from EJEMPLOS_TRABAJO where id ="+a);
+            ps = cn.prepareStatement("select id,pn,job,cliente,decode(estandar,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as estandar,qtyproduccion,revision,decode(PRIORIDAD,0,' ',1,'URGENTE') AS PRIORIDAD,estado from EJEMPLOS_TRABAJO where id ="+a);
             ResultSet rs = ps.executeQuery();
             if (rs.next())
             {
@@ -147,6 +147,7 @@ public static ArrayList<ClassTrabajos> ListarProcesoEjemplos(int a) {
                c.setQtyproduccion(rs.getInt("qtyproduccion"));
                c.setRevision(rs.getString("revision"));
                c.setPrioridadStrin(rs.getString("PRIORIDAD"));
+               c.setEstadoeje(rs.getInt("estado"));
             }
             cn.close();
             ps.close();
@@ -187,7 +188,7 @@ public static ClassTrabajos buscarEjemploTrabajo(int a) throws SQLException{
     
     public static ArrayList<ClassTrabajos> ListarProcesoEjemplo(int a) {
                    
-        return Ejemplo("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS') AS DEPTO, nota from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
+        return Ejemplo("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS',13,'MOLDING') AS DEPTO, nota from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
     }
     private static ArrayList<ClassTrabajos> Ejemplo(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -218,12 +219,17 @@ public static ClassTrabajos buscarEjemploTrabajo(int a) throws SQLException{
 
 public static ArrayList<ClassTrabajos> ListarHistorialEjemplos(String a) {
         return SQL("select ID,PN,JOB,CLIENTE,decode(ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR ,"
-                + "REVISION,QTYPRODUCCION,COMENTARIOS,FECHAFIN,decode(ESTADO,2,'',3,'TRABAJO CREADO') as ESTADO FROM EJEMPLOS_TRABAJO WHERE UPPER(PN) LIKE UPPER('"+a+"%') and estado in (2,3) order by id" );
+                + "REVISION,QTYPRODUCCION,COMENTARIOS,FECHAFIN,decode(ESTADO,2,'',4,'TRABAJO CREADO') as ESTADO FROM EJEMPLOS_TRABAJO WHERE UPPER(PN) LIKE UPPER('"+a+"%') and estado in (4,2) order by id" );
+    }
+
+public static ArrayList<ClassTrabajos> ListarHistorialEjemplosCerrados(String a) {
+        return SQL("select ID,PN,JOB,CLIENTE,decode(ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR ,"
+                + "REVISION,QTYPRODUCCION,COMENTARIOS,FECHAFIN,decode(ESTADO,2,'',4,'TRABAJO CREADO') as ESTADO FROM EJEMPLOS_TRABAJO WHERE UPPER(PN) LIKE UPPER('"+a+"%') and estado in (5) order by id" );
     }
     
 public static ArrayList<ClassTrabajos> ListarHistorialEjemplos2(String a) {
         return SQL("select ID,PN,JOB,CLIENTE,decode(ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR ,"
-                + "REVISION,QTYPRODUCCION,COMENTARIOS,FECHAFIN,decode(ESTADO,2,'',3,'TRABAJO CREADO') as ESTADO FROM EJEMPLOS_TRABAJO WHERE UPPER(PN) LIKE UPPER('"+a+"%') and estado = 2 order by id" );
+                + "REVISION,QTYPRODUCCION,COMENTARIOS,FECHAFIN,decode(ESTADO,2,'EJEMPLO TERMINADO',3,'EJEMPLO INCOMPLETO') as ESTADO FROM EJEMPLOS_TRABAJO WHERE UPPER(PN) LIKE UPPER('"+a+"%') and estado in (2,3) order by id" );
     }
     private static ArrayList<ClassTrabajos> SQL(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -254,8 +260,90 @@ public static ArrayList<ClassTrabajos> ListarHistorialEjemplos2(String a) {
         return list;
 }
     
+
+     public static ArrayList<ClassTrabajos> ListarTrabajosPrioridadEjemplo(String a , String b) {
+        return SQL2E("select ID,'' as NOLOTES,PN,JOB,CLIENTE,decode(ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,REVISION,qtyproduccion,qtyproduccion as QTYPORLOTE,'1' as NOLOTE FROM EJEMPLOS_TRABAJO WHERE  estado = 1 and UPPER(PN) LIKE UPPER('"+a+"%') and UPPER(JOB) LIKE UPPER('"+b+"%') order by id");
+    }
+    private static ArrayList<ClassTrabajos> SQL2E(String sql){
+    ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
+    Connection cn = BD.getConnection();
+        try {
+            ClassTrabajos t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ClassTrabajos();
+                 t.setId(rs.getInt("ID"));
+                 t.setPN(rs.getString("PN"));
+                 t.setJob(rs.getString("JOB"));
+                 t.setCliente(rs.getString("CLIENTE"));
+                 t.setEstandar(rs.getString("ESTANDAR"));
+                 t.setRevision(rs.getString("REVISION"));
+                 t.setLotes(rs.getInt("NOLOTES"));
+                 t.setQtyproduccion(rs.getInt("QTYPRODUCCION"));
+                 t.setQTYPORLOTE(rs.getInt("QTYPORLOTE"));
+                 t.setNOLOTE(rs.getInt("NOLOTE"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list;
+}
+    
+
+public static ClassTrabajos buscarTrabajoEditarEjemplo(int a) throws SQLException{
+        return buscarTrabajoEditarEJE(a ,null);
+    }
+    
+    public static ClassTrabajos buscarTrabajoEditarEJE(int a, ClassTrabajos c) throws SQLException {
+             
+            Connection cn = BD.getConnection();
+            PreparedStatement ps = null;
+            ps = cn.prepareStatement("SELECT ID,PN,JOB,CLIENTE,QTYCLIENTE,QTYPRODUCCION,REVISION,DECODE(ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,'' as NOLOTE,FECHAIN,PRIORIDAD,comentarios as nota FROM ejemplos_trabajo WHERE ID ="+a);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+            {
+               if (c==null)
+               {c = new ClassTrabajos(){
+               };
+               }
+               c.setId(rs.getInt("ID"));
+               c.setPN(rs.getString("PN"));
+               c.setJob(rs.getString("JOB"));
+               c.setCliente(rs.getString("CLIENTE"));
+               c.setQtycliente(rs.getInt("QTYCLIENTE"));
+               c.setQtyproduccion(rs.getInt("QTYPRODUCCION"));
+               c.setRevision(rs.getString("REVISION"));
+               c.setEstandar(rs.getString("ESTANDAR"));
+               c.setNOLOTE(rs.getInt("NOLOTE"));
+               c.setFecha(rs.getString("FECHAIN"));
+               c.setPrioridad(rs.getInt("PRIORIDAD"));
+               c.setComentarios(rs.getString("NOTA"));
+            }
+            cn.close();
+            ps.close();
+            return c;
+            
+    }
+    
+        public static boolean EditarNodeEjemplo(ClassTrabajos t) throws SQLException{
         
-        
-        
-        
+        Connection cn = BD.getConnection();
+        PreparedStatement ps = null;
+        ps = cn.prepareStatement("UPDATE EJEMPLOS_TRABAJO SET PRIORIDAD = ? WHERE ID ="+t.getId());
+        //ps.setDate(1,new java.sql.Date(t.getFecha().getTime())); 
+        ps.setInt(1, t.getPrioridad());
+        int rowsUpdated = ps.executeUpdate();
+        cn.close();
+        ps.close();
+        if (rowsUpdated > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }  
+            
 }

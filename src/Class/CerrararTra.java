@@ -15,23 +15,33 @@ public class CerrararTra {
     
     private Date fecha;
     private int no;
+    private String nota;
+    private int Estado;
 
+    public int getEstado() {
+        return Estado;
+    }
+
+    public void setEstado(int Estado) {
+        this.Estado = Estado;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
     public int getNo() {
         return no;
     }
-
     public void setNo(int no) {
         this.no = no;
     }
-    
-
     public Date getFecha() {
         return fecha;
     }
-
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-    
-    
 }

@@ -5,6 +5,7 @@
  */
 package Formularios;
 
+import BD.BD;
 import Ejemplos.RecoridosEjemplos;
 import Consultas.Drawings;
 import Consultas.EjemplosAprobadosParaTrabajos;
@@ -13,10 +14,23 @@ import Consultas.Historial;
 import Consultas.HistorialEjemplos;
 import Ejemplos.AprobacionEjemplos;
 import Ejemplos.IngresoEjemplos;
+import Ejemplos.PrioridadProduccionEjemplos;
 import java.awt.Dimension;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import Formularios.EditarCantidadLotes;
+import SolicitudesMateriales.ActualizarStatus;
+import SolicitudesMateriales.ConsultadePedidos;
+import SolicitudesMateriales.ConsultadeProductos;
+import SolicitudesMateriales.EntregaSolicitud;
+import SolicitudesMateriales.HistorialStatus;
+import SolicitudesMateriales.InicioSolicItudesEjemplos;
+import SolicitudesMateriales.STATUS;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author jluis
@@ -47,6 +61,10 @@ public class Inicio extends javax.swing.JFrame {
             nuevoejemplo.setEnabled(true);
             procesoejemplo.setEnabled(true);
             aprobacionejemplo.setEnabled(true);
+            taller.setEnabled(true);
+            PRIORIDADEJE.setEnabled(true);
+            Prioridad.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         } else if (depto == 1)//transformadores
         {
             nuevotrabajo.setEnabled(true);
@@ -55,58 +73,73 @@ public class Inicio extends javax.swing.JFrame {
             cerrartrabajo.setEnabled(true);
             EDITARCANTIDAD.setEnabled(true);
             procesoejemplo.setEnabled(true);
+            Prioridad.setEnabled(true);
+            PRIORIDADEJE.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         } else if (depto == 2)//INGENIERIA2
         {
             procesos.setEnabled(true);
            // nuevoejemplo.setEnabled(true);
             procesoejemplo.setEnabled(true);
             aprobacionejemplo.setEnabled(true);
+            trabajosdepto.setEnabled(true);
             
         } else if (depto == 3)//potting
         {
             procesos.setEnabled(true);
             procesoejemplo.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         } else if (depto == 4)//inspeccio
         {
             procesos.setEnabled(true);
             procesoejemplo.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         } else if (depto == 5)//testing
         {
             procesos.setEnabled(true);
             procesoejemplo.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         } else if (depto == 6)//calidad    
         {
             procesos.setEnabled(true);
             procesoejemplo.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         } else if (depto == 7)//oscar
         {
             procesos.setEnabled(true);
             //nuevoejemplo.setEnabled(true);
             procesoejemplo.setEnabled(true);
             aprobacionejemplo.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         }else if (depto == 8)//BODEGA
         {
             procesos.setEnabled(true);
             //nuevoejemplo.setEnabled(true);
             procesoejemplo.setEnabled(true);
            // aprobacionejemplo.setEnabled(true);
+           trabajosdepto.setEnabled(true);
         }else if (depto == 9)//RELACION CON EL CLIENTE
         {
             procesos.setEnabled(true);
             nuevoejemplo.setEnabled(true);
             procesoejemplo.setEnabled(true);
             //aprobacionejemplo.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         }else if (depto == 10)//TALLER
         {
             procesos.setEnabled(true);
             procesoejemplo.setEnabled(true);
             //aprobacionejemplo.setEnabled(true);
+            taller.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         }
         else if (depto == 10)//TALLER
         {
             procesos.setEnabled(true);
             procesoejemplo.setEnabled(true);
             //aprobacionejemplo.setEnabled(true);
+            taller.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         }
         else if (depto == 11)//GERENCIA
         {
@@ -115,14 +148,20 @@ public class Inicio extends javax.swing.JFrame {
             procesoejemplo.setEnabled(true);
             aprobacionejemplo.setEnabled(true);
             //aprobacionejemplo.setEnabled(true);
+            trabajosdepto.setEnabled(true);
         }
-        else if (depto == 12)//GERENCIA
+        else if (depto == 12)//CHIPS
         {
             procesos.setEnabled(true);
             procesoejemplo.setEnabled(true);
-            
+            trabajosdepto.setEnabled(true);
         }
-        
+        else if (depto == 13)//MOLDING
+        {
+            procesos.setEnabled(true);
+            procesoejemplo.setEnabled(true);
+            trabajosdepto.setEnabled(true);
+        }
     }
 
     /**
@@ -139,16 +178,25 @@ public class Inicio extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        me = new javax.swing.JMenu();
         nuevotrabajo = new javax.swing.JMenuItem();
         EDITARCANTIDAD = new javax.swing.JMenuItem();
         iniciartrabajo = new javax.swing.JMenuItem();
         procesos = new javax.swing.JMenuItem();
+        trabajosdepto = new javax.swing.JMenuItem();
         cerrartrabajo = new javax.swing.JMenuItem();
+        Prioridad = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
         nuevoejemplo = new javax.swing.JMenuItem();
         procesoejemplo = new javax.swing.JMenuItem();
         aprobacionejemplo = new javax.swing.JMenuItem();
+        PRIORIDADEJE = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem15 = new javax.swing.JMenuItem();
+        jMenuItem17 = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
+        jMenuItem16 = new javax.swing.JMenuItem();
+        jMenuItem14 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -156,6 +204,15 @@ public class Inicio extends javax.swing.JFrame {
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
+        TALLER = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        taller = new javax.swing.JMenu();
+        jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
 
@@ -163,6 +220,14 @@ public class Inicio extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Historial de Produccion");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         Pane1.setBackground(new java.awt.Color(255, 255, 255));
         Pane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -194,16 +259,16 @@ public class Inicio extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Pane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 458, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 350, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(26, 26, 26))
         );
 
         jMenuBar1.setPreferredSize(new java.awt.Dimension(56, 35));
 
-        jMenu1.setText("TRABAJOS");
-        jMenu1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jMenu1.setMargin(new java.awt.Insets(5, 25, 5, 25));
+        me.setText("TRABAJOS");
+        me.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        me.setMargin(new java.awt.Insets(5, 25, 5, 25));
 
         nuevotrabajo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/New.png"))); // NOI18N
         nuevotrabajo.setText("NUEVO TRABAJO");
@@ -214,7 +279,7 @@ public class Inicio extends javax.swing.JFrame {
                 nuevotrabajoActionPerformed(evt);
             }
         });
-        jMenu1.add(nuevotrabajo);
+        me.add(nuevotrabajo);
 
         EDITARCANTIDAD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/edit2.png"))); // NOI18N
         EDITARCANTIDAD.setText("EDITAR CANTIDAD DE LOTE");
@@ -225,7 +290,7 @@ public class Inicio extends javax.swing.JFrame {
                 EDITARCANTIDADActionPerformed(evt);
             }
         });
-        jMenu1.add(EDITARCANTIDAD);
+        me.add(EDITARCANTIDAD);
 
         iniciartrabajo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/1481834876_tick_16.png"))); // NOI18N
         iniciartrabajo.setText("INICIAR TRABAJO");
@@ -236,7 +301,7 @@ public class Inicio extends javax.swing.JFrame {
                 iniciartrabajoActionPerformed(evt);
             }
         });
-        jMenu1.add(iniciartrabajo);
+        me.add(iniciartrabajo);
 
         procesos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ajustes.png"))); // NOI18N
         procesos.setText("PROCESOS");
@@ -247,7 +312,18 @@ public class Inicio extends javax.swing.JFrame {
                 procesosActionPerformed(evt);
             }
         });
-        jMenu1.add(procesos);
+        me.add(procesos);
+
+        trabajosdepto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/List.png"))); // NOI18N
+        trabajosdepto.setText("TRABAJOS POR DEPTO");
+        trabajosdepto.setEnabled(false);
+        trabajosdepto.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        trabajosdepto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                trabajosdeptoActionPerformed(evt);
+            }
+        });
+        me.add(trabajosdepto);
 
         cerrartrabajo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancelar.png"))); // NOI18N
         cerrartrabajo.setText("CERRAR TRABAJO");
@@ -258,9 +334,20 @@ public class Inicio extends javax.swing.JFrame {
                 cerrartrabajoActionPerformed(evt);
             }
         });
-        jMenu1.add(cerrartrabajo);
+        me.add(cerrartrabajo);
 
-        jMenuBar1.add(jMenu1);
+        Prioridad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Problem.png"))); // NOI18N
+        Prioridad.setText("PRIORIDAD DE PRODUCCION");
+        Prioridad.setEnabled(false);
+        Prioridad.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        Prioridad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrioridadActionPerformed(evt);
+            }
+        });
+        me.add(Prioridad);
+
+        jMenuBar1.add(me);
 
         jMenu6.setText("EJEMPLOS");
         jMenu6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -299,10 +386,53 @@ public class Inicio extends javax.swing.JFrame {
         });
         jMenu6.add(aprobacionejemplo);
 
+        PRIORIDADEJE.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Problem.png"))); // NOI18N
+        PRIORIDADEJE.setText("PRIORIDAD DE PRODUCCION");
+        PRIORIDADEJE.setEnabled(false);
+        PRIORIDADEJE.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        PRIORIDADEJE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PRIORIDADEJEActionPerformed(evt);
+            }
+        });
+        jMenu6.add(PRIORIDADEJE);
+
         jMenuBar1.add(jMenu6);
+
+        jMenu1.setText("ENVIOS");
+        jMenu1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jMenu1.setMargin(new java.awt.Insets(5, 25, 5, 25));
+
+        jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/New.png"))); // NOI18N
+        jMenuItem15.setText("NUEVO ENVIO");
+        jMenuItem15.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenu1.add(jMenuItem15);
+
+        jMenuItem17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Modify.png"))); // NOI18N
+        jMenuItem17.setText("EDITAR ENVIO");
+        jMenuItem17.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenu1.add(jMenuItem17);
+
+        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/List.png"))); // NOI18N
+        jMenuItem13.setText("LISTA DE ENVIOS");
+        jMenuItem13.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenu1.add(jMenuItem13);
+
+        jMenuItem16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Calendar.png"))); // NOI18N
+        jMenuItem16.setText("DATE CODE");
+        jMenuItem16.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenu1.add(jMenuItem16);
+
+        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Info.png"))); // NOI18N
+        jMenuItem14.setText("S/N");
+        jMenuItem14.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenu1.add(jMenuItem14);
+
+        jMenuBar1.add(jMenu1);
 
         jMenu4.setText("HISTORIAL");
         jMenu4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jMenu4.setHideActionText(true);
         jMenu4.setMargin(new java.awt.Insets(5, 25, 5, 25));
 
         jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Report.png"))); // NOI18N
@@ -359,6 +489,82 @@ public class Inicio extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
+        TALLER.setText("SOLICITUDES TALLER");
+        TALLER.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        TALLER.setMargin(new java.awt.Insets(5, 25, 5, 25));
+
+        jMenuItem2.setText("INGRESO SOLICITUD");
+        jMenuItem2.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        TALLER.add(jMenuItem2);
+
+        jMenuItem3.setText("CONSULTA ESTADO DE SOLICITUDES");
+        jMenuItem3.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        TALLER.add(jMenuItem3);
+
+        jMenuItem8.setText("HISTORIAL SOLICITUDES");
+        jMenuItem8.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        TALLER.add(jMenuItem8);
+
+        taller.setText("REPORTES TALLER");
+        taller.setEnabled(false);
+        taller.setMargin(new java.awt.Insets(5, 5, 5, 5));
+
+        jMenuItem9.setText("LISTADO DE SOLICITUDES ");
+        jMenuItem9.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        taller.add(jMenuItem9);
+
+        jMenuItem10.setText("ACTUALIZAR ESTADO DE SOLICITUDES");
+        jMenuItem10.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        taller.add(jMenuItem10);
+
+        jMenuItem11.setText("ENTREGA DE PRODUCTOS");
+        jMenuItem11.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem11.setName(""); // NOI18N
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        taller.add(jMenuItem11);
+
+        jMenuItem12.setText("PRODUCTOS TALLER");
+        jMenuItem12.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        taller.add(jMenuItem12);
+
+        TALLER.add(taller);
+
+        jMenuBar1.add(TALLER);
+
         jMenu5.setForeground(new java.awt.Color(255, 0, 0));
         jMenu5.setText("SALIR");
         jMenu5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -387,7 +593,7 @@ public class Inicio extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Pane1)
+            .addComponent(Pane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -444,7 +650,12 @@ public class Inicio extends javax.swing.JFrame {
             depto = 12;
             
         }
-        
+        else if(a.equals("molding")){
+            depto = 13;
+        }
+        else if(a.equals("marking")){
+        depto = 2;
+        }
         jLabel2.setText(a);
     }
 
@@ -467,14 +678,12 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_procesosActionPerformed
 
     private void cerrartrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrartrabajoActionPerformed
-
         CerrarTrabajo tra = new CerrarTrabajo();
         Pane1.add(tra);
         Dimension desktopSize = Pane1.getSize();
         Dimension FrameSize = tra.getSize();
         tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         tra.show();
-
     }//GEN-LAST:event_cerrartrabajoActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -492,9 +701,17 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu5ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-
+        try {
+    Connection cnn = BD.getConnection();
+    PreparedStatement ps = null;
+    ps= cnn.prepareStatement("delete from pedidos_trabajos where  depto = "+depto+" and estado = 0");
+    ps.executeUpdate();
+    cnn.close();
+    ps.close();
+      } catch (SQLException ex) {
+            Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+        }   
         System.exit(1);
-
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -516,7 +733,6 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void iniciartrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciartrabajoActionPerformed
-
         IniciarTrabajoTrans tra = new IniciarTrabajoTrans();
         Pane1.add(tra);
         Dimension desktopSize = Pane1.getSize();
@@ -559,8 +775,6 @@ public class Inicio extends javax.swing.JFrame {
         Dimension FrameSize = tra.getSize();
         tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         tra.show();
-
-
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void EDITARCANTIDADActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EDITARCANTIDADActionPerformed
@@ -572,6 +786,115 @@ public class Inicio extends javax.swing.JFrame {
         tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         tra.show();
     }//GEN-LAST:event_EDITARCANTIDADActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        HistorialStatus tra = new HistorialStatus();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        InicioSolicItudesEjemplos tra = new InicioSolicItudesEjemplos();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        STATUS tra = new STATUS();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+    Connection cnn = BD.getConnection();
+    PreparedStatement ps = null;
+    ps= cnn.prepareStatement("delete from pedidos_trabajos where  depto = "+depto+" and estado = 0");
+    ps.executeUpdate();
+    cnn.close();
+    ps.close();
+      } catch (SQLException ex) {
+            Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+    }//GEN-LAST:event_formWindowClosing
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+    }//GEN-LAST:event_formWindowClosed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        ActualizarStatus tra = new ActualizarStatus();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        EntregaSolicitud tra = new EntregaSolicitud();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+       ConsultadePedidos tra = new ConsultadePedidos();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        ConsultadeProductos tra = new ConsultadeProductos();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void PrioridadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrioridadActionPerformed
+        PrioridadProduccion tra = new PrioridadProduccion();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_PrioridadActionPerformed
+
+    private void PRIORIDADEJEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PRIORIDADEJEActionPerformed
+        PrioridadProduccionEjemplos tra = new PrioridadProduccionEjemplos();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_PRIORIDADEJEActionPerformed
+
+    private void trabajosdeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trabajosdeptoActionPerformed
+       
+        TrabajosDepartamento tra = new TrabajosDepartamento();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+        
+    }//GEN-LAST:event_trabajosdeptoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -610,7 +933,10 @@ public class Inicio extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem EDITARCANTIDAD;
+    private javax.swing.JMenuItem PRIORIDADEJE;
     public static javax.swing.JDesktopPane Pane1;
+    private javax.swing.JMenuItem Prioridad;
+    private javax.swing.JMenu TALLER;
     private javax.swing.JMenuItem aprobacionejemplo;
     private javax.swing.JMenuItem cerrartrabajo;
     private javax.swing.JMenuItem iniciartrabajo;
@@ -624,14 +950,29 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem15;
+    private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem17;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JMenu me;
     private javax.swing.JMenuItem nuevoejemplo;
     private javax.swing.JMenuItem nuevotrabajo;
     private javax.swing.JMenuItem procesoejemplo;
     private javax.swing.JMenuItem procesos;
+    private javax.swing.JMenu taller;
+    private javax.swing.JMenuItem trabajosdepto;
     // End of variables declaration//GEN-END:variables
 }

@@ -179,7 +179,7 @@ public class EditarCantidadLotes extends javax.swing.JInternalFrame {
             t.setQTYPORLOTE(Integer.parseInt(QTYPORLOTE.getText()));
             t.setComentarios(COMENTARIO.getText());
             if (URGENTE.isSelected()) {t.setPrioridad(1);}else{t.setPrioridad(0);}
-            InsertTrabajosTransformadores.EditarNodeLote(t);
+            InsertTrabajosTransformadores.EditarNodeLoteO(t);
             JOptionPane.showMessageDialog(null, "LOTE ACTUALIZADO...");
             limpiar();
             ListarTrabajos();
@@ -698,7 +698,7 @@ public class EditarCantidadLotes extends javax.swing.JInternalFrame {
                             .addComponent(JOB1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3)))
-                .addGap(0, 96, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
 
         pack();
