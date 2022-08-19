@@ -35,10 +35,27 @@ public class ProductosTaller {
     private int Cantidad;
     private int by;
     private String nota;
+    private String nota2;
     private String fechaSolicitado;
     private int CantidadEntre;
     private String prioridad;
+    private String confirma;
 
+    public String getConfirma() {
+        return confirma;
+    }
+
+    public void setConfirma(String confirma) {
+        this.confirma = confirma;
+    }
+    public String getNota2() {
+        return nota2;
+    }
+
+    public void setNota2(String nota2) {
+        this.nota2 = nota2;
+    }
+    
     public String getPrioridad() {
         return prioridad;
     }

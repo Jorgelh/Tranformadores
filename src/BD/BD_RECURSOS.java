@@ -5,7 +5,6 @@
  */
 package BD;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,19 +14,20 @@ import javax.swing.JOptionPane;
  *
  * @author jluis
  */
-public class BD {
-    
-    public static Connection getConnection() {
+public class BD_RECURSOS {
+     public  static  Connection getConnection() {
         Connection cn = null;
-        Connection cn1 = null;
         try {
             Class.forName("oracle.jdbc.OracleDriver");
             String url = "jdbc:oracle:thin:@192.168.0.2:1521:orcl";
-            String user = "transformadores";
+            String user = "rrhh";
             String password = "campana";
-            /*String url2 = "jdbc:oracle:thin:@192.168.0.2:1521:orcl";
-            String user2 = "rrhh";
-            String password2 = "campana";*/
+            /*String url = "jdbc:oracle:thin:@192.168.0.39:1521:xe";
+            String user = "rrhh";
+            String password = "campana";
+            /*String url = "jdbc:oracle:thin:@localhost:1521:xe";
+            String user = "rrhh"; 
+            String password = "campana";*/
             cn= DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException e) {
             cn=null;
@@ -38,5 +38,4 @@ public class BD {
         }
         return cn;
     }
-    
 }

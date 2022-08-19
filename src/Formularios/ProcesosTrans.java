@@ -98,7 +98,8 @@ public class ProcesosTrans extends javax.swing.JInternalFrame {
         else if (a.equals("bodega")){depto=8;}//BODEGA 
         else if (a.equals("ingenieria")){depto=9;}//RELACION CON EL CLIENTE 
         else if (a.equals("taller")){depto=10;}//TALLE
-        else if (a.equals("Sotano")){depto=10;}//SOTANO
+        //else if (a.equals("Sotano")){depto=13;}//SOTANO
+        else if (a.equals("Sotano")){depto=10;}//SOTANO REGISTRA MOLDING
         else if (a.equals("apacheco")){depto=11;}//RELACION CON EL CLIENTE 
         else if (a.equals("deptochips")){depto=12;}//RELACION CON EL CLIENTE   
         else if (a.equals("molding")){depto = 13;}//DEPARTAMENTO DE MOLDING

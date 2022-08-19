@@ -8,6 +8,7 @@ package Formularios;
 import BD.BD;
 import Ejemplos.RecoridosEjemplos;
 import Consultas.Drawings;
+import Envios.EditarEnvio;
 import Consultas.EjemplosAprobadosParaTrabajos;
 import Consultas.Fotos;
 import Consultas.Historial;
@@ -15,22 +16,36 @@ import Consultas.HistorialEjemplos;
 import Ejemplos.AprobacionEjemplos;
 import Ejemplos.IngresoEjemplos;
 import Ejemplos.PrioridadProduccionEjemplos;
+import Ejemplos.RecoridosEjemplosCombo;
+import Envios.AgregarPNquenoestaenprocesosTransformer;
+import Envios.CambiarPNenvio;
+import Envios.DateCode;
+import Envios.EditarCantidad;
+import Envios.Historialenvios;
+import Envios.ListadoEnvios;
+import Envios.NuevoEnvio;
+import Envios.SN;
 import java.awt.Dimension;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import Formularios.EditarCantidadLotes;
+import SolicitudMaterialesBodega.CalculoIndicador;
+import SolicitudMaterialesBodega.EntregasBodega;
+import SolicitudMaterialesBodega.HistorialEntregas;
+import SolicitudMaterialesBodega.SolicitudesBodega;
 import SolicitudesMateriales.ActualizarStatus;
 import SolicitudesMateriales.ConsultadePedidos;
 import SolicitudesMateriales.ConsultadeProductos;
 import SolicitudesMateriales.EntregaSolicitud;
 import SolicitudesMateriales.HistorialStatus;
-import SolicitudesMateriales.InicioSolicItudesEjemplos;
+import SolicitudesMateriales.InicioSolicItudesProductosAtaller;
 import SolicitudesMateriales.STATUS;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 /**
  *
  * @author jluis
@@ -50,6 +65,7 @@ public class Inicio extends javax.swing.JFrame {
         }
         initComponents();
         selectusuario();
+        vencer();
         this.setExtendedState(MAXIMIZED_BOTH);
 
         if (depto == 0) {
@@ -65,6 +81,15 @@ public class Inicio extends javax.swing.JFrame {
             PRIORIDADEJE.setEnabled(true);
             Prioridad.setEnabled(true);
             trabajosdepto.setEnabled(true);
+            ingresoSolicitud.setEnabled(true);
+            entregaSolicitud.setEnabled(true);
+            listaEnvio.setEnabled(true);
+            modificarenvio.setEnabled(true);
+            sn.setEnabled(true);
+            crearenvio.setEnabled(true);
+             datecode.setEnabled(true);
+             Menumodificarenvio.setEnabled(true);
+            
         } else if (depto == 1)//transformadores
         {
             nuevotrabajo.setEnabled(true);
@@ -76,6 +101,12 @@ public class Inicio extends javax.swing.JFrame {
             Prioridad.setEnabled(true);
             PRIORIDADEJE.setEnabled(true);
             trabajosdepto.setEnabled(true);
+            ingresoSolicitud.setEnabled(true);
+            listaEnvio.setEnabled(true);
+            modificarenvio.setEnabled(true);
+            sn.setEnabled(true);
+            crearenvio.setEnabled(true);
+            Menumodificarenvio.setEnabled(true);
         } else if (depto == 2)//INGENIERIA2
         {
             procesos.setEnabled(true);
@@ -106,11 +137,20 @@ public class Inicio extends javax.swing.JFrame {
             trabajosdepto.setEnabled(true);
         } else if (depto == 7)//oscar
         {
+            nuevotrabajo.setEnabled(true);
+            iniciartrabajo.setEnabled(true);
             procesos.setEnabled(true);
-            //nuevoejemplo.setEnabled(true);
+            cerrartrabajo.setEnabled(true);
+            EDITARCANTIDAD.setEnabled(true);
+            nuevoejemplo.setEnabled(true);
             procesoejemplo.setEnabled(true);
             aprobacionejemplo.setEnabled(true);
+            taller.setEnabled(true);
+            PRIORIDADEJE.setEnabled(true);
+            Prioridad.setEnabled(true);
             trabajosdepto.setEnabled(true);
+            ingresoSolicitud.setEnabled(true);
+            entregaSolicitud.setEnabled(true);
         }else if (depto == 8)//BODEGA
         {
             procesos.setEnabled(true);
@@ -118,6 +158,7 @@ public class Inicio extends javax.swing.JFrame {
             procesoejemplo.setEnabled(true);
            // aprobacionejemplo.setEnabled(true);
            trabajosdepto.setEnabled(true);
+           entregaSolicitud.setEnabled(true);
         }else if (depto == 9)//RELACION CON EL CLIENTE
         {
             procesos.setEnabled(true);
@@ -125,6 +166,7 @@ public class Inicio extends javax.swing.JFrame {
             procesoejemplo.setEnabled(true);
             //aprobacionejemplo.setEnabled(true);
             trabajosdepto.setEnabled(true);
+            datecode.setEnabled(true);
         }else if (depto == 10)//TALLER
         {
             procesos.setEnabled(true);
@@ -162,6 +204,7 @@ public class Inicio extends javax.swing.JFrame {
             procesoejemplo.setEnabled(true);
             trabajosdepto.setEnabled(true);
         }
+        
     }
 
     /**
@@ -186,17 +229,23 @@ public class Inicio extends javax.swing.JFrame {
         trabajosdepto = new javax.swing.JMenuItem();
         cerrartrabajo = new javax.swing.JMenuItem();
         Prioridad = new javax.swing.JMenuItem();
+        jMenuItem21 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
         nuevoejemplo = new javax.swing.JMenuItem();
         procesoejemplo = new javax.swing.JMenuItem();
         aprobacionejemplo = new javax.swing.JMenuItem();
         PRIORIDADEJE = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem15 = new javax.swing.JMenuItem();
-        jMenuItem17 = new javax.swing.JMenuItem();
-        jMenuItem13 = new javax.swing.JMenuItem();
-        jMenuItem16 = new javax.swing.JMenuItem();
+        listaEnvio = new javax.swing.JMenuItem();
+        crearenvio = new javax.swing.JMenuItem();
+        Menumodificarenvio = new javax.swing.JMenu();
+        modificarenvio = new javax.swing.JMenuItem();
         jMenuItem14 = new javax.swing.JMenuItem();
+        jMenuItem15 = new javax.swing.JMenuItem();
+        jMenuItem16 = new javax.swing.JMenuItem();
+        sn = new javax.swing.JMenuItem();
+        datecode = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -205,6 +254,7 @@ public class Inicio extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         TALLER = new javax.swing.JMenu();
+        jMenu8 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
@@ -213,6 +263,14 @@ public class Inicio extends javax.swing.JFrame {
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem12 = new javax.swing.JMenuItem();
+        jMenu9 = new javax.swing.JMenu();
+        ingresoSolicitud = new javax.swing.JMenuItem();
+        entregaSolicitud = new javax.swing.JMenuItem();
+        jMenuItem22 = new javax.swing.JMenuItem();
+        jMenuItem20 = new javax.swing.JMenuItem();
+        jMenu7 = new javax.swing.JMenu();
+        jMenuItem18 = new javax.swing.JMenuItem();
+        jMenuItem19 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
 
@@ -248,7 +306,7 @@ public class Inicio extends javax.swing.JFrame {
         Pane1Layout.setHorizontalGroup(
             Pane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Pane1Layout.createSequentialGroup()
-                .addContainerGap(306, Short.MAX_VALUE)
+                .addContainerGap(778, Short.MAX_VALUE)
                 .addGroup(Pane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -259,7 +317,7 @@ public class Inicio extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Pane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 350, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 521, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(26, 26, 26))
         );
@@ -347,6 +405,15 @@ public class Inicio extends javax.swing.JFrame {
         });
         me.add(Prioridad);
 
+        jMenuItem21.setText("VENCIMIENTO DE TRABAJOS");
+        jMenuItem21.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem21ActionPerformed(evt);
+            }
+        });
+        me.add(jMenuItem21);
+
         jMenuBar1.add(me);
 
         jMenu6.setText("EJEMPLOS");
@@ -403,30 +470,105 @@ public class Inicio extends javax.swing.JFrame {
         jMenu1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jMenu1.setMargin(new java.awt.Insets(5, 25, 5, 25));
 
-        jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/New.png"))); // NOI18N
-        jMenuItem15.setText("NUEVO ENVIO");
-        jMenuItem15.setMargin(new java.awt.Insets(5, 5, 5, 5));
-        jMenu1.add(jMenuItem15);
+        listaEnvio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/List.png"))); // NOI18N
+        listaEnvio.setText("LISTA DE ENVIOS");
+        listaEnvio.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        listaEnvio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listaEnvioActionPerformed(evt);
+            }
+        });
+        jMenu1.add(listaEnvio);
 
-        jMenuItem17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Modify.png"))); // NOI18N
-        jMenuItem17.setText("EDITAR ENVIO");
-        jMenuItem17.setMargin(new java.awt.Insets(5, 5, 5, 5));
-        jMenu1.add(jMenuItem17);
+        crearenvio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Application.png"))); // NOI18N
+        crearenvio.setText("CREAR,EDITAR Y CERRAR ENVIO");
+        crearenvio.setEnabled(false);
+        crearenvio.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        crearenvio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                crearenvioActionPerformed(evt);
+            }
+        });
+        jMenu1.add(crearenvio);
 
-        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/List.png"))); // NOI18N
-        jMenuItem13.setText("LISTA DE ENVIOS");
-        jMenuItem13.setMargin(new java.awt.Insets(5, 5, 5, 5));
-        jMenu1.add(jMenuItem13);
+        Menumodificarenvio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/edit2.png"))); // NOI18N
+        Menumodificarenvio.setText("MODIFICAR ENVIO");
+        Menumodificarenvio.setEnabled(false);
+        Menumodificarenvio.setMargin(new java.awt.Insets(5, 5, 5, 5));
 
-        jMenuItem16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Calendar.png"))); // NOI18N
-        jMenuItem16.setText("DATE CODE");
-        jMenuItem16.setMargin(new java.awt.Insets(5, 5, 5, 5));
-        jMenu1.add(jMenuItem16);
+        modificarenvio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Modify.png"))); // NOI18N
+        modificarenvio.setText("AGREGAR O ELIMINAR P/N");
+        modificarenvio.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        modificarenvio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarenvioActionPerformed(evt);
+            }
+        });
+        Menumodificarenvio.add(modificarenvio);
 
-        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Info.png"))); // NOI18N
-        jMenuItem14.setText("S/N");
+        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/edit2.png"))); // NOI18N
+        jMenuItem14.setText("MODIFICAR FECHA DE ENVIO DE P/N");
         jMenuItem14.setMargin(new java.awt.Insets(5, 5, 5, 5));
-        jMenu1.add(jMenuItem14);
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
+        Menumodificarenvio.add(jMenuItem14);
+
+        jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/edit2.png"))); // NOI18N
+        jMenuItem15.setText("MODIFICAR CANTIDADES");
+        jMenuItem15.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
+        Menumodificarenvio.add(jMenuItem15);
+
+        jMenuItem16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/New.png"))); // NOI18N
+        jMenuItem16.setText("AGREGAR P/N QUE NO ESTA EN PROCESOS");
+        jMenuItem16.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem16ActionPerformed(evt);
+            }
+        });
+        Menumodificarenvio.add(jMenuItem16);
+
+        jMenu1.add(Menumodificarenvio);
+
+        sn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Info.png"))); // NOI18N
+        sn.setText("S/N");
+        sn.setEnabled(false);
+        sn.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        sn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                snActionPerformed(evt);
+            }
+        });
+        jMenu1.add(sn);
+
+        datecode.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Calendar.png"))); // NOI18N
+        datecode.setText("DATE CODE / FECHA PARA DATA");
+        datecode.setEnabled(false);
+        datecode.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        datecode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                datecodeActionPerformed(evt);
+            }
+        });
+        jMenu1.add(datecode);
+
+        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Folder.png"))); // NOI18N
+        jMenuItem13.setText("HISTORIAL DE ENVIOS");
+        jMenuItem13.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem13);
 
         jMenuBar1.add(jMenu1);
 
@@ -489,10 +631,15 @@ public class Inicio extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
-        TALLER.setText("SOLICITUDES TALLER");
+        TALLER.setText("SOLICITUDES DE MATERIALES");
         TALLER.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         TALLER.setMargin(new java.awt.Insets(5, 25, 5, 25));
 
+        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Create.png"))); // NOI18N
+        jMenu8.setText("SOLICITUDES A TALLER");
+        jMenu8.setMargin(new java.awt.Insets(10, 5, 10, 5));
+
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/New.png"))); // NOI18N
         jMenuItem2.setText("INGRESO SOLICITUD");
         jMenuItem2.setMargin(new java.awt.Insets(5, 5, 5, 5));
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -500,8 +647,9 @@ public class Inicio extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        TALLER.add(jMenuItem2);
+        jMenu8.add(jMenuItem2);
 
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Hint.png"))); // NOI18N
         jMenuItem3.setText("CONSULTA ESTADO DE SOLICITUDES");
         jMenuItem3.setMargin(new java.awt.Insets(5, 5, 5, 5));
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -509,8 +657,9 @@ public class Inicio extends javax.swing.JFrame {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        TALLER.add(jMenuItem3);
+        jMenu8.add(jMenuItem3);
 
+        jMenuItem8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Folder.png"))); // NOI18N
         jMenuItem8.setText("HISTORIAL SOLICITUDES");
         jMenuItem8.setMargin(new java.awt.Insets(5, 5, 5, 5));
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
@@ -518,7 +667,7 @@ public class Inicio extends javax.swing.JFrame {
                 jMenuItem8ActionPerformed(evt);
             }
         });
-        TALLER.add(jMenuItem8);
+        jMenu8.add(jMenuItem8);
 
         taller.setText("REPORTES TALLER");
         taller.setEnabled(false);
@@ -561,9 +710,85 @@ public class Inicio extends javax.swing.JFrame {
         });
         taller.add(jMenuItem12);
 
-        TALLER.add(taller);
+        jMenu8.add(taller);
+
+        TALLER.add(jMenu8);
+
+        jMenu9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Create.png"))); // NOI18N
+        jMenu9.setText("SOLICITUDES A BODEGA");
+        jMenu9.setMargin(new java.awt.Insets(10, 5, 10, 5));
+
+        ingresoSolicitud.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/New.png"))); // NOI18N
+        ingresoSolicitud.setText("INGRESO SOLICITUD ");
+        ingresoSolicitud.setEnabled(false);
+        ingresoSolicitud.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        ingresoSolicitud.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingresoSolicitudActionPerformed(evt);
+            }
+        });
+        jMenu9.add(ingresoSolicitud);
+
+        entregaSolicitud.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Downloads folder.png"))); // NOI18N
+        entregaSolicitud.setText("ENTREGA DE MATERIAL");
+        entregaSolicitud.setEnabled(false);
+        entregaSolicitud.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        entregaSolicitud.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                entregaSolicitudActionPerformed(evt);
+            }
+        });
+        jMenu9.add(entregaSolicitud);
+
+        jMenuItem22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Folder.png"))); // NOI18N
+        jMenuItem22.setText("HISTORIAL ENTREGAS");
+        jMenuItem22.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem22.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem22ActionPerformed(evt);
+            }
+        });
+        jMenu9.add(jMenuItem22);
+
+        jMenuItem20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Diagram.png"))); // NOI18N
+        jMenuItem20.setText("INDICADOR BODEGA");
+        jMenuItem20.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem20ActionPerformed(evt);
+            }
+        });
+        jMenu9.add(jMenuItem20);
+
+        TALLER.add(jMenu9);
 
         jMenuBar1.add(TALLER);
+
+        jMenu7.setText("CONTROL DE CAMBIOS");
+        jMenu7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jMenu7.setMargin(new java.awt.Insets(5, 25, 5, 25));
+
+        jMenuItem18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/New.png"))); // NOI18N
+        jMenuItem18.setText("NUEVO CAMBIO");
+        jMenuItem18.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem18);
+
+        jMenuItem19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/How-to.png"))); // NOI18N
+        jMenuItem19.setText("HISTORIAL");
+        jMenuItem19.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jMenuItem19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem19ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem19);
+
+        jMenuBar1.add(jMenu7);
 
         jMenu5.setForeground(new java.awt.Color(255, 0, 0));
         jMenu5.setText("SALIR");
@@ -593,7 +818,7 @@ public class Inicio extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Pane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(Pane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -604,11 +829,24 @@ public class Inicio extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+       
+    
+    
+    public void vencer(){
+    
+        TrabajosVencimiento tra = new TrabajosVencimiento();
+              Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }
+    
     public void selectusuario() {
         String a = System.getProperty("user.name");//usar usuario de windows
         if (a.equals("jluis")) {
             depto = 0;
+           
         } //INFORMATICA
         else if (a.equals("ehernandez")) {
             depto = 1;
@@ -640,15 +878,20 @@ public class Inicio extends javax.swing.JFrame {
         else if(a.equals("taller")){
             depto = 10;
         }//TALLER
-        else if(a.equals("Sotano")){
+       else if(a.equals("Sotano")){
             depto = 10;
-        }//TALLER
+        }//TALLER*/
+        
+       /* else if(a.equals("Sotano")){
+            depto = 13;
+            a = "Molding";
+        }//TALLER*/
+        
         else if(a.equals("apacheco")){
             depto = 11;
         }
         else if(a.equals("deptochips")){
-            depto = 12;
-            
+            depto = 12;            
         }
         else if(a.equals("molding")){
             depto = 13;
@@ -669,12 +912,23 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_nuevotrabajoActionPerformed
 
     private void procesosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_procesosActionPerformed
+        
+        if(depto == 9){
+        ProcesosTransCombo tra = new ProcesosTransCombo();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+        }else
+        {
         ProcesosTrans tra = new ProcesosTrans();
         Pane1.add(tra);
         Dimension desktopSize = Pane1.getSize();
         Dimension FrameSize = tra.getSize();
         tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         tra.show();
+        }
     }//GEN-LAST:event_procesosActionPerformed
 
     private void cerrartrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrartrabajoActionPerformed
@@ -751,12 +1005,21 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_nuevoejemploActionPerformed
 
     private void procesoejemploActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_procesoejemploActionPerformed
+        if(depto==9){
+            RecoridosEjemplosCombo tra = new RecoridosEjemplosCombo();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+        }else{
         RecoridosEjemplos tra = new RecoridosEjemplos();
         Pane1.add(tra);
         Dimension desktopSize = Pane1.getSize();
         Dimension FrameSize = tra.getSize();
         tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
         tra.show();
+        }
     }//GEN-LAST:event_procesoejemploActionPerformed
 
     private void aprobacionejemploActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aprobacionejemploActionPerformed
@@ -797,7 +1060,7 @@ public class Inicio extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        InicioSolicItudesEjemplos tra = new InicioSolicItudesEjemplos();
+        InicioSolicItudesProductosAtaller tra = new InicioSolicItudesProductosAtaller();
         Pane1.add(tra);
         Dimension desktopSize = Pane1.getSize();
         Dimension FrameSize = tra.getSize();
@@ -825,6 +1088,8 @@ public class Inicio extends javax.swing.JFrame {
       } catch (SQLException ex) {
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
         }   
+        
+       // JOptionPane.showConfirmDialog(null, "Se cancelon el pedido que no se confirmo");
     }//GEN-LAST:event_formWindowClosing
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -896,6 +1161,151 @@ public class Inicio extends javax.swing.JFrame {
         
     }//GEN-LAST:event_trabajosdeptoActionPerformed
 
+    private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
+       
+        ControlCambios tra = new ControlCambios();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+        
+    }//GEN-LAST:event_jMenuItem18ActionPerformed
+
+    private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
+        
+        HistorialCambios tra = new HistorialCambios();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+        
+    }//GEN-LAST:event_jMenuItem19ActionPerformed
+
+    private void ingresoSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresoSolicitudActionPerformed
+        SolicitudesBodega tra = new SolicitudesBodega();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_ingresoSolicitudActionPerformed
+
+    private void entregaSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entregaSolicitudActionPerformed
+        EntregasBodega tra = new EntregasBodega();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_entregaSolicitudActionPerformed
+
+    private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
+        HistorialEntregas tra = new HistorialEntregas();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem22ActionPerformed
+
+    private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
+       
+        CalculoIndicador tra = new CalculoIndicador();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+        
+    }//GEN-LAST:event_jMenuItem20ActionPerformed
+
+    private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
+       vencer();
+    }//GEN-LAST:event_jMenuItem21ActionPerformed
+
+    private void listaEnvioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaEnvioActionPerformed
+        ListadoEnvios tra = new ListadoEnvios();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_listaEnvioActionPerformed
+
+    private void modificarenvioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarenvioActionPerformed
+        EditarEnvio tra = new EditarEnvio();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_modificarenvioActionPerformed
+
+    private void crearenvioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearenvioActionPerformed
+        NuevoEnvio tra = new NuevoEnvio();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_crearenvioActionPerformed
+
+    private void datecodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_datecodeActionPerformed
+        DateCode tra = new DateCode();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_datecodeActionPerformed
+
+    private void snActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_snActionPerformed
+       SN tra = new SN();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_snActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+      Historialenvios tra = new Historialenvios();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+         CambiarPNenvio tra = new CambiarPNenvio();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        EditarCantidad tra = new EditarCantidad();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
+
+    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
+        AgregarPNquenoestaenprocesosTransformer tra = new AgregarPNquenoestaenprocesosTransformer();
+        Pane1.add(tra);
+        Dimension desktopSize = Pane1.getSize();
+        Dimension FrameSize = tra.getSize();
+        tra.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        tra.show();
+    }//GEN-LAST:event_jMenuItem16ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -933,12 +1343,17 @@ public class Inicio extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem EDITARCANTIDAD;
+    private javax.swing.JMenu Menumodificarenvio;
     private javax.swing.JMenuItem PRIORIDADEJE;
     public static javax.swing.JDesktopPane Pane1;
     private javax.swing.JMenuItem Prioridad;
     private javax.swing.JMenu TALLER;
     private javax.swing.JMenuItem aprobacionejemplo;
     private javax.swing.JMenuItem cerrartrabajo;
+    private javax.swing.JMenuItem crearenvio;
+    private javax.swing.JMenuItem datecode;
+    private javax.swing.JMenuItem entregaSolicitud;
+    private javax.swing.JMenuItem ingresoSolicitud;
     private javax.swing.JMenuItem iniciartrabajo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -948,6 +1363,9 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenu jMenu8;
+    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
@@ -957,8 +1375,12 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
-    private javax.swing.JMenuItem jMenuItem17;
+    private javax.swing.JMenuItem jMenuItem18;
+    private javax.swing.JMenuItem jMenuItem19;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem20;
+    private javax.swing.JMenuItem jMenuItem21;
+    private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
@@ -967,11 +1389,14 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JMenuItem listaEnvio;
     private javax.swing.JMenu me;
+    private javax.swing.JMenuItem modificarenvio;
     private javax.swing.JMenuItem nuevoejemplo;
     private javax.swing.JMenuItem nuevotrabajo;
     private javax.swing.JMenuItem procesoejemplo;
     private javax.swing.JMenuItem procesos;
+    private javax.swing.JMenuItem sn;
     private javax.swing.JMenu taller;
     private javax.swing.JMenuItem trabajosdepto;
     // End of variables declaration//GEN-END:variables

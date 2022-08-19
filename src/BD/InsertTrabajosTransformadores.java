@@ -158,7 +158,7 @@ public class InsertTrabajosTransformadores {
              
             Connection cn = BD.getConnection();
             PreparedStatement ps = null;
-            ps = cn.prepareStatement("select lotes.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,lotes.nolote,lotes.cantidad,decode(LOTES.PRIORIDAD,0,'',1,'URGENTE') as PRIORIDAD, trabajo.nolotes from trabajo inner join lotes on trabajo.id = lotes.id where lotes.ID_LOTE ="+a);
+            ps = cn.prepareStatement("select trabajo.ID,lotes.ID_LOTE,TRABAJO.PN,TRABAJO.JOB,TRABAJO.CLIENTE,decode(TRABAJO.ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR,TRABAJO.REVISION,lotes.nolote,lotes.cantidad,decode(LOTES.PRIORIDAD,0,'',1,'URGENTE') as PRIORIDAD, trabajo.nolotes from trabajo inner join lotes on trabajo.id = lotes.id where lotes.ID_LOTE ="+a);
             ResultSet rs = ps.executeQuery();
             if (rs.next())
             {
@@ -176,6 +176,7 @@ public class InsertTrabajosTransformadores {
                c.setQTYPORLOTE(rs.getInt("cantidad"));
                c.setPrioridadStrin(rs.getString("PRIORIDAD"));
                c.setQTYDELOTES(rs.getInt("nolotes"));
+               c.setId_trabajo(rs.getInt("ID"));
             }
             cn.close();
             ps.close();
@@ -444,7 +445,7 @@ public class InsertTrabajosTransformadores {
         return list;
     }  
     public static ArrayList<ClassTrabajos> ListarProductosYaSolicitados(int a,int b) {
-        return SQpedidos("SELECT p.id_producto as ID_PRODUCTO ,t.descripcion as DESCRIPCION,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as fecha, p.cantidad FROM PEDIDOS_TRABAJOS P INNER JOIN productos_taller T ON p.id_producto = t.id_producto WHERE P.ID_LOTE ="+a+" and estado in(0,1)  and p.depto ="+b); 
+        return SQpedidos("SELECT p.id_producto as ID_PRODUCTO ,t.descripcion as DESCRIPCION,to_char(p.fecha,'dd/mm/yyyy hh:mi:ss') as fecha, p.cantidad FROM PEDIDOS_TRABAJOS P INNER JOIN productos_taller T ON p.id_producto = t.id_producto WHERE P.ID_LOTE ="+a+" and estado in(0,1)  and p.depto ="+b); 
     }
     private static ArrayList<ClassTrabajos> SQpedidos(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -470,7 +471,7 @@ public class InsertTrabajosTransformadores {
     }  
     
 public static ArrayList<ClassTrabajos> ListarProductosYaSolicitadosEjemplo(int a,int b) {
-        return SQpedidosE("SELECT p.id_producto as ID_PRODUCTO ,t.descripcion as DESCRIPCION,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as fecha,p.cantidad FROM PEDIDOS_TRABAJOS P INNER JOIN productos_taller T ON p.id_producto = t.id_producto WHERE  p.id ="+a+"  and p.depto ="+b); 
+        return SQpedidosE("SELECT p.id_producto as ID_PRODUCTO ,t.descripcion as DESCRIPCION,to_char(p.fecha,'dd/mm/yyyy hh:mi:ss') as fecha,p.cantidad FROM PEDIDOS_TRABAJOS P INNER JOIN productos_taller T ON p.id_producto = t.id_producto WHERE  p.id ="+a+"  and p.depto ="+b); 
     }
     private static ArrayList<ClassTrabajos> SQpedidosE(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -529,6 +530,299 @@ public static ArrayList<ClassTrabajos> ListarProductosYaSolicitadosEjemplo(int a
             return null;
         } 
         return list;
+}   
+    
+    
+    
+
+
+public static ClassTrabajos buscarTrabajo(int a) throws SQLException{
+        return buscarTrabajoCambios(a ,null);
+    }
+    
+    public static ClassTrabajos buscarTrabajoCambios(int a, ClassTrabajos c) throws SQLException {
+             
+            Connection cn = BD.getConnection();
+            PreparedStatement ps = null;
+            ps = cn.prepareStatement("select ID,PN,JOB,CLIENTE,REVISION from trabajo where ID ="+a);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+            {
+               if (c==null)
+               {c = new ClassTrabajos(){
+               };
+               }
+               c.setId(rs.getInt("ID"));
+               c.setPN(rs.getString("PN"));
+               c.setJob(rs.getString("JOB"));
+               c.setCliente(rs.getString("CLIENTE"));
+               c.setRevision(rs.getString("REVISION"));
+            }
+            cn.close();
+            ps.close();
+            return c;
+}
+    
+public static ClassTrabajos buscarTrabajoHistorial(int a) throws SQLException{
+        return buscarTrabajoCambiosHistorial(a ,null);
+    }
+    
+    public static ClassTrabajos buscarTrabajoCambiosHistorial(int a, ClassTrabajos c) throws SQLException {
+             
+            Connection cn = BD.getConnection();
+            PreparedStatement ps = null;
+            ps = cn.prepareStatement("select ID,PN,JOB,CLIENTE,REVISION,decode(ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR, fechain as FECHA  from trabajo where ID ="+a);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+            {
+               if (c==null)
+               {c = new ClassTrabajos(){
+               };
+               }
+               c.setId(rs.getInt("ID"));
+               c.setPN(rs.getString("PN"));
+               c.setJob(rs.getString("JOB"));
+               c.setCliente(rs.getString("CLIENTE"));
+               c.setRevision(rs.getString("REVISION"));
+               c.setEstandar(rs.getString("ESTANDAR"));
+               c.setFecha(rs.getString("FECHA"));
+            }
+            cn.close();
+            ps.close();
+            return c;
 }    
     
+
+public static ClassTrabajos buscarTrabajoControlHistorial(int a) throws SQLException{
+        return buscarTrabajoControlCambiosHistorial(a ,null);
+    }
+    
+    public static ClassTrabajos buscarTrabajoControlCambiosHistorial(int a, ClassTrabajos c) throws SQLException {
+             
+            Connection cn = BD.getConnection();
+            PreparedStatement ps = null;
+            ps = cn.prepareStatement("select ID,PN,JOB,CLIENTE,REVISION,decode(ESTANDAR,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as ESTANDAR, fechain as FECHA  from trabajo where ID ="+a);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+            {
+               if (c==null)
+               {c = new ClassTrabajos(){
+               };
+               }
+               c.setId(rs.getInt("ID"));
+               c.setPN(rs.getString("PN"));
+               c.setJob(rs.getString("JOB"));
+               c.setCliente(rs.getString("CLIENTE"));
+               c.setRevision(rs.getString("REVISION"));
+               c.setEstandar(rs.getString("ESTANDAR"));
+               c.setFecha(rs.getString("FECHA"));
+            }
+            cn.close();
+            ps.close();
+            return c;
+}
+
+
+
+        public static void InsertarCambio(ClassTrabajos t) throws SQLException{
+        Connection con = BD.getConnection();
+        PreparedStatement ps = null;
+        ps = con.prepareStatement("insert into controlcambios(id,proposito,consecuencia,integridad,r_foto,r_materia,r_impresion,solicita,cambio,aprueba,fecha,observaciones,id_control) values(?,?,?,?,?,?,?,?,?,?,?,?,controlcamb.NEXTVAL)");
+        //ps.setInt(1,t.getId_proceso());
+        ps.setInt(1, t.getId());
+        ps.setInt(2, t.getProposito());
+        ps.setInt(3, t.getConsecuencia());
+        ps.setString(4, t.getIntegridad());
+        ps.setInt(5, t.getR_foto());
+        ps.setInt(6, t.getR_materia());
+        ps.setInt(7, t.getR_imprimir());
+        ps.setInt(8, t.getSolicita());
+        ps.setString(9, t.getCambio());
+        ps.setInt(10, t.getAprueba());
+        ps.setDate(11,new java.sql.Date(t.getFecha1().getTime()));
+        ps.setString(12, t.getObservaciones());
+        ps.executeUpdate();
+        con.close();
+        ps.close(); 
+    }
+    
+    
+
+ public static ArrayList<ClassTrabajos> ListarCambiosRealizados(int a) {
+        return P("SELECT INTEGRIDAD,CAMBIO,APRUEBA,TO_CHAR(FECHA,'DD/MM/YY') AS FECHA,OBSERVACIONES FROM CONTROLCAMBIOS where id = "+a);
+    }
+     
+    private static ArrayList<ClassTrabajos> P(String sql){
+    ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
+    Connection cn = BD.getConnection();
+        try {
+            ClassTrabajos t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ClassTrabajos();
+                 t.setIntegridad(rs.getString("INTEGRIDAD"));
+                 t.setCambio(rs.getString("CAMBIO"));
+                 t.setAprueba(rs.getInt("APRUEBA"));
+                 t.setFecha(rs.getString("FECHA"));
+                 t.setObservaciones(rs.getString("OBSERVACIONES"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list;
+} 
+       //test
+ /*public static ArrayList<ClassTrabajos> ListarCambiosRealizadosHistorial(int a) throws SQLException{
+        return PH("SELECT proposito,consecuencia,integridad,solicita,cambio,aprueba,to_char(fecha,'DD/MM/YY') AS fecha,observaciones FROM CONTROLCAMBIOS where id_control = "+a);
+    }
+     
+    private static ArrayList<ClassTrabajos> PH(String sql){
+    ArrayList<ClassTrabajos> list1 = new ArrayList<ClassTrabajos>();
+    Connection cn = BD.getConnection();
+        try {
+            ClassTrabajos t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ClassTrabajos();
+                 t.setPropositoS(rs.getString("proposito"));
+                 t.setConsecuenciaS(rs.getString("consecuencias"));
+                 t.setIntegridadS(rs.getString("integridad"));
+                 t.setSolicitaS(rs.getString("solicita"));
+                 t.setAprueba(rs.getInt("aprueba"));
+                 t.setCambio(rs.getString("cambio"));
+                 t.setFecha(rs.getString("fecha"));
+                 t.setObservaciones(rs.getString("observaciones"));
+                 list1.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list1;
+}*/
+    
+    
+    
+public static ArrayList<ClassTrabajos> ListarCambiosRealizadosHistorial2(int a) {
+        return PH2("SELECT id_control,integridad,cambio,aprueba,to_char(fecha,'DD/MM/YY') AS FECHA,OBSERVACIONES FROM CONTROLCAMBIOS where id = "+a);
+    }
+     
+    private static ArrayList<ClassTrabajos> PH2(String sql){
+    ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
+    Connection cn = BD.getConnection();
+        try {
+            ClassTrabajos t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ClassTrabajos();
+                 t.setId(rs.getInt("id_control"));
+                 t.setIntegridadS(rs.getString("integridad"));
+                 t.setAprueba(rs.getInt("aprueba"));
+                 t.setCambio(rs.getString("cambio"));
+                 t.setFecha(rs.getString("fecha"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list;
+}       
+    
+   
+    
+public static ClassTrabajos buscarTrabajoHistorialFinal(int a) throws SQLException{
+        return buscarTrabajoCambiosHistorialF(a ,null);
+    }
+    
+    public static ClassTrabajos buscarTrabajoCambiosHistorialF(int a, ClassTrabajos c) throws SQLException {
+             
+            Connection cn = BD.getConnection();
+            Connection cn2 = BD_RECURSOS.getConnection();
+            PreparedStatement ps = null;
+            ps = cn.prepareStatement("SELECT decode(proposito,1,'MODIFICAR',2,'ELIMINAR') as proposito,decode(consecuencia,1,'ACTUALIZACION DE LA INFORMACION',2,'DEJAR SOLO INFORMACION VIGENTE') as consecuencia,integridad,"
+                    + "decode(solicita,1,'INSPECCION',2,'TESTING',3,'CHIPS',4,'STRIP Y POTTING',5,'TRANSFORMADORES',6,'TALLER',7,'BODEGA',8,'INGENIERIA',9,'GERENCIA') as solicita,cambio,"
+                    + "aprueba,to_char(fecha,'DD/MM/YY') AS fecha,observaciones, "
+                    + "nvl(decode(r_foto,1,'FOTOGRAFIAS'),' ') AS FOTO,nvl(decode(r_materia,1,'MATERIA PRIMA'),' ') AS MATERIA,nvl(decode(r_impresion,1,'PAPEL PARA IMPRESION'),' ') AS impresion FROM CONTROLCAMBIOS  where id_control ="+a);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+            {
+               if (c==null)
+               {c = new ClassTrabajos(){
+               };
+               }
+                 c.setPropositoS(rs.getString("proposito"));
+                 c.setConsecuenciaS(rs.getString("consecuencia"));
+                 c.setIntegridadS(rs.getString("integridad"));
+                 c.setSolicitaS(rs.getString("solicita"));
+                 c.setAprueba(rs.getInt("aprueba"));
+                 c.setCambio(rs.getString("cambio"));
+                 c.setFecha(rs.getString("fecha"));
+                 c.setObservaciones(rs.getString("observaciones"));
+                 c.setR_fotoS(rs.getString("foto"));
+                 c.setR_materiaS(rs.getString("materia"));
+                 c.setR_imprimirS(rs.getString("impresion"));
+            }
+            cn.close();
+            ps.close();
+            return c;
+}        
+    
+
+public static ArrayList<ClassTrabajos> ListarTrabajosVencidos(String a , String b) {
+        return Vencido("select l.id,t.pn,t.job,t.cliente,l.fechainicio,t.fechain,(SELECT COUNT(*) FROM lotes WHERE ID IN(l.id) AND ESTADO = 1 GROUP BY id)as LOTES,\n" +
+"round(MONTHS_BETWEEN(TO_DATE(SYSDATE,'DD/MM/YYYY'),TO_DATE(l.fechainicio,'DD/MM/YYYY')),0) as meses,\n" +
+"case WHEN round(MONTHS_BETWEEN(TO_DATE(SYSDATE,'DD/MM/YYYY'),TO_DATE(l.fechainicio,'DD/MM/YYYY')),0) > 3.9  AND  round(MONTHS_BETWEEN(TO_DATE(SYSDATE,'DD/MM/YYYY'),TO_DATE(l.fechainicio,'DD/MM/YYYY')),1) <= 6 THEN 'TRABAJO PROXIMO A VENCER'\n" +
+"WHEN\n" +
+"round(MONTHS_BETWEEN(TO_DATE(SYSDATE,'DD/MM/YYYY'),TO_DATE(l.fechainicio,'DD/MM/YYYY')),0) >= 5 THEN 'TRABAJO VENCIDO' \n" +
+"WHEN\n" +
+"round(MONTHS_BETWEEN(TO_DATE(SYSDATE,'DD/MM/YYYY'),TO_DATE(l.fechainicio,'DD/MM/YYYY')),0) <= 3 THEN 'TRABAJO A TIEMPO' \n" +
+"END as TIPO\n" +
+"from lotes l inner join trabajo t on l.id = t.id where l.id_lote in(\n" +
+"select min(l.id_lote) as ID_LOTE from lotes l inner join trabajo t on l.id = t.id  where t.id in(select id from trabajo where estado = 1) and l.fechainicio is not null group by  t.id,t.pn,t.job,t.cliente\n" +
+") and UPPER(t.PN) LIKE UPPER('"+a+"%') and UPPER(t.JOB) LIKE UPPER('"+b+"%') order by  to_date(l.fechainicio,'dd/mm/yy')" );
+    }
+    private static ArrayList<ClassTrabajos> Vencido(String sql){
+    ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
+    Connection cn = BD.getConnection();
+        try {
+            ClassTrabajos t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ClassTrabajos();
+                 t.setId(rs.getInt("id"));
+                 t.setPN(rs.getString("PN"));
+                 t.setJob(rs.getString("JOB"));
+                 t.setCliente(rs.getString("CLIENTE"));
+                 t.setFecha(rs.getString("fechain"));
+                 t.setFecha2(rs.getString("fechainicio"));
+                 t.setLotes(rs.getInt("LOTES"));
+                 t.setMeses(rs.getInt("meses"));
+                 t.setEstado(rs.getString("TIPO"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list;
+}    
+    
+    
+    
+    
+    
+    
+    
+   
 }

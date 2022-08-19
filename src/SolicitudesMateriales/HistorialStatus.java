@@ -24,6 +24,7 @@ import javax.swing.table.TableColumn;
  */
 public class HistorialStatus extends javax.swing.JInternalFrame {
      int idlote;
+     int idlote1;
      int idpedido;
      int depto;
     /**
@@ -173,12 +174,13 @@ public class HistorialStatus extends javax.swing.JInternalFrame {
              }    
     
      private void ListarProductosTrabajosTerminados(){
+         
         ArrayList<ProductosTaller> result = InsertarProductosTaller.ListarProductosTrabajoTerminadosAceptado(idlote);
         RecargarTablaProductos(result);  
     }
      private void RecargarTablaProductos(ArrayList<ProductosTaller> list){
          
-              Object[][] datos = new Object[list.size()][11];
+              Object[][] datos = new Object[list.size()][13];
               int i = 0;
               for(ProductosTaller t : list)
               {
@@ -194,12 +196,14 @@ public class HistorialStatus extends javax.swing.JInternalFrame {
                   datos[i][8] = t.getBy();
                   datos[i][9] = t.getEstatus();
                   datos[i][10] = t.getNota();
+                  datos[i][11] = t.getNota2();
+                  datos[i][12] = t.getDepartamento();
                   i++;
               }    
              PENDIENTES.setModel(new javax.swing.table.DefaultTableModel(
                 datos,
                 new String[]{
-                "DESCRIPCION","CANTIDAD SOLICITADA","FECHA DE SOLICITUD","FECHA DE ENTREGA","CANTIDAD DE ENTREGA","P.O","P.O INSERT","P.O POT ROD","REALIZADO","ESTADO","NOTA"       })
+                "DESCRIPCION","CANTIDAD SOLICITADA","FECHA DE SOLICITUD","FECHA DE ENTREGA","CANTIDAD DE ENTREGA","P.O","P.O INSERT","P.O POT ROD","REALIZADO","ESTADO","NOTA","OBSERVACION","DEPARTAMENTO"      })
              {  
                  @Override
              public boolean isCellEditable(int row, int column){
@@ -216,15 +220,19 @@ public class HistorialStatus extends javax.swing.JInternalFrame {
              columna4.setPreferredWidth(10);
              TableColumn columna5 = PENDIENTES.getColumn("P.O POT ROD");
              columna5.setPreferredWidth(10);
+             TableColumn columna6 = PENDIENTES.getColumn("CANTIDAD SOLICITADA");
+             columna6.setPreferredWidth(0);
+             TableColumn columna7 = PENDIENTES.getColumn("FECHA DE SOLICITUD");
+             columna7.setPreferredWidth(0);
              }
      
      private void ListarProductosTrabajosTerminadosEjemplo(){
-        ArrayList<ProductosTaller> result = InsertarProductosTaller.ListarProductosTrabajoTerminadosAceptadoEjemplo(idlote);
+        ArrayList<ProductosTaller> result = InsertarProductosTaller.ListarProductosTrabajoTerminadosAceptadoEjemplo(idlote1);
         RecargarTablaProductosE(result);  
     }
      private void RecargarTablaProductosE(ArrayList<ProductosTaller> list){
          
-              Object[][] datos = new Object[list.size()][11];
+              Object[][] datos = new Object[list.size()][13];
               int i = 0;
               for(ProductosTaller t : list)
               {
@@ -240,12 +248,14 @@ public class HistorialStatus extends javax.swing.JInternalFrame {
                   datos[i][8] = t.getBy();
                   datos[i][9] = t.getEstatus();
                   datos[i][10] = t.getNota();
+                  datos[i][11] = t.getNota2();
+                  datos[i][12] = t.getDepartamento();
                   i++;
               }    
              PENDIENTES1.setModel(new javax.swing.table.DefaultTableModel(
                 datos,
                 new String[]{
-                "DESCRIPCION","CANTIDAD SOLICITADA","FECHA DE SOLICITUD","FECHA DE ENTREGA","CANTIDAD DE ENTREGA","P.O","P.O INSERT","P.O POT ROD","REALIZADO","ESTADO","NOTA"       })
+                "DESCRIPCION","CANTIDAD SOLICITADA","FECHA DE SOLICITUD","FECHA DE ENTREGA","CANTIDAD DE ENTREGA","P.O","P.O INSERT","P.O POT ROD","REALIZADO","ESTADO","NOTA","OBSERVACION","DEPARTAMENTO"   })
              {  
                  @Override
              public boolean isCellEditable(int row, int column){
@@ -262,6 +272,10 @@ public class HistorialStatus extends javax.swing.JInternalFrame {
              columna4.setPreferredWidth(10);
              TableColumn columna5 = PENDIENTES1.getColumn("P.O POT ROD");
              columna5.setPreferredWidth(10);
+             TableColumn columna6 = PENDIENTES1.getColumn("CANTIDAD SOLICITADA");
+             columna6.setPreferredWidth(0);
+             TableColumn columna7 = PENDIENTES1.getColumn("FECHA DE SOLICITUD");
+             columna7.setPreferredWidth(0);
              }
      
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -309,9 +323,6 @@ public class HistorialStatus extends javax.swing.JInternalFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TrabajosMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                TrabajosMouseEntered(evt);
-            }
         });
         jScrollPane1.setViewportView(Trabajos);
 
@@ -323,11 +334,6 @@ public class HistorialStatus extends javax.swing.JInternalFrame {
 
             }
         ));
-        PENDIENTES.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                PENDIENTESMouseClicked(evt);
-            }
-        });
         jScrollPane2.setViewportView(PENDIENTES);
 
         PN.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -490,13 +496,8 @@ public class HistorialStatus extends javax.swing.JInternalFrame {
       ListarProductosTrabajosTerminados();
     }//GEN-LAST:event_TrabajosMouseClicked
 
-    private void PENDIENTESMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PENDIENTESMouseClicked
-       
-       
-    }//GEN-LAST:event_PENDIENTESMouseClicked
-
     private void Trabajos1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Trabajos1MouseClicked
-       idlote = (Integer.parseInt(String.valueOf(Trabajos1.getModel().getValueAt(Trabajos1.getSelectedRow(), 0))));
+       idlote1 = (Integer.parseInt(String.valueOf(Trabajos1.getModel().getValueAt(Trabajos1.getSelectedRow(), 0))));
         ListarProductosTrabajosTerminadosEjemplo();
         
     }//GEN-LAST:event_Trabajos1MouseClicked
@@ -512,10 +513,6 @@ public class HistorialStatus extends javax.swing.JInternalFrame {
     private void PN1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PN1KeyTyped
        
     }//GEN-LAST:event_PN1KeyTyped
-
-    private void TrabajosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TrabajosMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TrabajosMouseEntered
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable PENDIENTES;

@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Formularios;
+package SolicitudMaterialesBodega;
 
-import BD.BD;
-import BD.InsertTrabajosTransformadores;
+import Formularios.*;
+import BD.*;
 import Class.*;
 import Class.CerrararTra;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
@@ -22,18 +21,18 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import sun.font.TrueTypeFont;
  
 
 /**
  *
  * @author jluis
  */
-public class CerrarTrabajo extends javax.swing.JInternalFrame {
+public class SolicitudesBodega extends javax.swing.JInternalFrame {
     int id;
     int id_proceso;
     int n;
-    int id_trabajo;
-    int lotes;
+    int id_lote = 0;
     DefaultTableModel temp;
     
     
@@ -41,9 +40,10 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
     /**
      * Creates new form Recoridos
      */
-    public CerrarTrabajo() {
+    public SolicitudesBodega() {
         initComponents();
-        ListarTrabajos();
+        ListarTrabajosTrans();
+        ListarTrabajosPendientes();
     }
     
     public void id(){
@@ -63,43 +63,6 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
           
     
     }
-    
-    public void ValidarLotes(){
-        
-        try {
-             Connection cn = BD.getConnection();
-             Statement ps = cn.createStatement();
-             ResultSet rs = ps.executeQuery("select count(LOTES.estado) as lotes from LOTES where id ="+id_trabajo+" and estado in(1,0)");
-             rs.next();
-             lotes = (rs.getInt("lotes"));
-             ps.close();
-             rs.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-    
-    public void CerrarTrabajo(){
-        
-        try {
-            
-        Connection cn = BD.getConnection();
-        PreparedStatement ps = null;
-        ps = cn.prepareStatement("UPDATE TRABAJO SET ESTADO = 2 WHERE ID ="+id_trabajo);
-        int rowsUpdated = ps.executeUpdate();
-        cn.close();
-        ps.close();
-        if (rowsUpdated > 0) {
-        } else {
-        }
-            
-        } catch (Exception e) {
-        }
-        
-        
-        
-    }
-    
     
  /*   public void actualizarTrabajo(){   
         try {
@@ -132,12 +95,13 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
         ESTANDARINFO.setText("");
         nolote.setText("");
         CANTIDADINFO.setText("");
-        fechafin.setDate(null);
+        PRIORIDAD.setText("");
+        FECHA.setText("");
     
     
     }
     
-    public void LimpirTablaPro() {
+    /*public void LimpirTablaPro() {
 
         try {
             temp = (DefaultTableModel) TablaPro.getModel();
@@ -150,32 +114,30 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
 
         }
 
-    }
+    }*/
    
-    public void terminar(){
+    public void AgregarSolicitu(){
     
         
-         if(no.getText().compareTo("")!=0 && fechafin.getDate()!=null){
+         if(no.getText().compareTo("")!=0 ){
             
-             int resp=JOptionPane.showConfirmDialog(null,"Desea Cerrar La Orden");
-          if (JOptionPane.OK_OPTION == resp){
           
         CerrararTra m = new CerrararTra();
         try {
+            
            m.setNo(Integer.parseInt(no.getText()));
-           m.setFecha(fechafin.getDate());
-           InsertTrabajosTransformadores.CerrarTra(m);
-           JOptionPane.showMessageDialog(null, "Trabajo Cerrado Correctamente");
+           m.setEstado(1);
+           SolicitudesBodegaClass.IniciarTra(m);
+           JOptionPane.showMessageDialog(null, "SOLICITUD INGRESADA");
            limpiar();
-           LimpirTablaPro();
-           ListarTrabajos();
-        } catch (Exception e) {
+           ListarTrabajosTrans();
+           
+        } catch (Exception e){
             JOptionPane.showMessageDialog(null, "MENSAJE"+e);
         }
-        }
-        }else{JOptionPane.showMessageDialog(null, "Ingrese Una Fecha o Seleccione Un Trabajo");}
-        }
-   
+        
+        }else{JOptionPane.showMessageDialog(null, "Seleccione Un Trabajo");}
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -185,6 +147,8 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         trab = new javax.swing.JTable();
@@ -192,8 +156,6 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         PN = new javax.swing.JTextField();
         JOB = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        TablaPro = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         PNINFO = new javax.swing.JTextField();
@@ -211,12 +173,31 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         no = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        PRIORIDAD = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        FECHA = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
-        fechafin = new com.toedter.calendar.JDateChooser();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        trab1 = new javax.swing.JTable();
+        aceptar = new javax.swing.JButton();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
 
         setClosable(true);
-        setTitle("CERRAR TRABAJO");
+        setTitle("TRABAJOS");
 
         jPanel1.setBackground(new java.awt.Color(153, 204, 255));
 
@@ -226,7 +207,7 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "", "No. LOTE", "P/N", "JOB", "CLIENTE", "ESTANDAR", "CANTIDAD ", "REV"
+                "", "P/N", "JOB", "CLIENTE", "ESTANDAR", "CANTIDAD ", "REV", "No. LOTE", "ESTATUS"
             }
         ));
         trab.setGridColor(new java.awt.Color(0, 0, 0));
@@ -246,13 +227,13 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(trab);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("P/N");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("JOB");
 
-        PN.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        PN.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         PN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PNActionPerformed(evt);
@@ -264,7 +245,7 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
             }
         });
 
-        JOB.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        JOB.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         JOB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JOBActionPerformed(evt);
@@ -275,18 +256,6 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
                 JOBKeyReleased(evt);
             }
         });
-
-        TablaPro.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        TablaPro.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "PROCESOS", "FECHA", "CANTIDAD", "PROCESOS REALIZADOS"
-            }
-        ));
-        TablaPro.setGridColor(new java.awt.Color(0, 0, 0));
-        jScrollPane2.setViewportView(TablaPro);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -346,6 +315,20 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
         no.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         no.setForeground(new java.awt.Color(0, 102, 255));
 
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel12.setText("PRIORIDAD");
+
+        PRIORIDAD.setEditable(false);
+        PRIORIDAD.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        PRIORIDAD.setForeground(new java.awt.Color(255, 0, 0));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel13.setText("FECHA DE  SOLICITUD");
+
+        FECHA.setEditable(false);
+        FECHA.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        FECHA.setForeground(new java.awt.Color(255, 0, 0));
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -359,41 +342,56 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
                                     .addComponent(jLabel10))
-                                .addGap(110, 110, 110))
+                                .addGap(102, 102, 102))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(no)
-                                .addGap(18, 18, 18)))
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
                                 .addComponent(PNINFO)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(CLIENTEINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7))
+                                .addComponent(CLIENTEINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel3))
-                                .addGap(80, 80, 80)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel9))
-                                .addGap(0, 72, Short.MAX_VALUE)))
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
+                                .addComponent(jLabel5)
+                                .addGap(95, 95, 95)))
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(REVISIONINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(11, 11, 11)
+                                .addGap(7, 7, 7)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(REVISIONINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
                                 .addComponent(jLabel7)))
-                        .addGap(43, 43, 43))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(28, 28, 28))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(JOBINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(ESTANDARINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(nolote)
-                        .addGap(18, 18, 18)
-                        .addComponent(CANTIDADINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42))))
+                        .addComponent(ESTANDARINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(nolote)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CANTIDADINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(25, 25, 25))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(PRIORIDAD, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(FECHA))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -401,14 +399,14 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel10)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel10))
                         .addGap(47, 47, 47))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(PNINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -416,22 +414,34 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
                             .addComponent(CLIENTEINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(REVISIONINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)))
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel7))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel7))
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JOBINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ESTANDARINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nolote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CANTIDADINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(PRIORIDAD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(FECHA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addGap(29, 29, 29)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancelar.png"))); // NOI18N
-        jButton1.setText("CERRAR TRABAJO");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/1481834876_tick_16.png"))); // NOI18N
+        jButton1.setText("AGREGAR SOLICITUD");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -439,67 +449,100 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
         });
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel11.setText("FECHA DE FINALIZACION");
+        jLabel11.setText("MATERIALES PENDIENTES");
 
-        fechafin.setDateFormatString("d/MM/yy");
-        fechafin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        trab1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        trab1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", "P/N", "JOB", "CLIENTE", "ESTANDAR", "CANTIDAD ", "REV", "No. LOTE"
+            }
+        ));
+        trab1.setGridColor(new java.awt.Color(0, 0, 0));
+        trab1.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+                trab1AncestorMoved(evt);
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        trab1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                trab1MouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(trab1);
+
+        aceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        aceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ComponenteImagenes/Good mark.png"))); // NOI18N
+        aceptar.setText("ACEPTAR");
+        aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aceptarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PN, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(JOB, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(PN, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(JOB, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(199, 199, 199)
+                                        .addComponent(jButton1))))
+                            .addComponent(jLabel11))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fechafin, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addGap(79, 79, 79)
-                .addComponent(jButton1)
-                .addGap(186, 186, 186))
+                .addContainerGap(1073, Short.MAX_VALUE)
+                .addComponent(aceptar)
+                .addGap(30, 30, 30))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(JOB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
+                    .addComponent(JOB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(fechafin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(aceptar, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -521,52 +564,70 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_PNActionPerformed
 
     private void PNKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PNKeyReleased
-           ListarTrabajos();
+           ListarTrabajosTrans();
     }//GEN-LAST:event_PNKeyReleased
 
     private void JOBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JOBActionPerformed
-                   ListarTrabajos();
+           ListarTrabajosTrans();
 
     }//GEN-LAST:event_JOBActionPerformed
 
     private void JOBKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JOBKeyReleased
-       ListarTrabajos();
+           ListarTrabajosTrans();
     }//GEN-LAST:event_JOBKeyReleased
 
     private void trabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_trabMouseClicked
-        llenacuainformacion();
+        
+         id_lote = (Integer.parseInt(String.valueOf(trab.getModel().getValueAt(trab.getSelectedRow(), 0))));
+         if((String.valueOf(trab.getModel().getValueAt(trab.getSelectedRow(), 8))).equalsIgnoreCase("ENTREGADO")){aceptar.setEnabled(true);}else{aceptar.setEnabled(false);}
     }//GEN-LAST:event_trabMouseClicked
 
     private void trabAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_trabAncestorMoved
     }//GEN-LAST:event_trabAncestorMoved
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       Cfecha();
+       AgregarSolicitu();
+       ListarTrabajosPendientes();
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-       /* if(no.getText().compareTo("")!=0 && fechafin.getDate()!=null){
+    private void trab1AncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_trab1AncestorMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_trab1AncestorMoved
+
+    private void trab1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_trab1MouseClicked
+       llenacuainformacion();
+       Cfecha();
+       
+    }//GEN-LAST:event_trab1MouseClicked
+
+    private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
+       
+        
+        if(id_lote !=0 ){
+            
+          
         CerrararTra m = new CerrararTra();
         try {
             
-           m.setNo(Integer.parseInt(no.getText()));
-           m.setFecha(fechafin.getDate());
-           InsertTrabajos.CerrarTra(m);
-           JOptionPane.showMessageDialog(null, "Trabajo Cerrado Correctamente");
-           limpiar();
-           LimpirTablaPro();
-           ListarTrabajos();
-           
-        } catch (Exception e) {
+           m.setNo(id_lote);
+           m.setEstado(3);
+           SolicitudesBodegaClass.AceptarEntrega(m);
+           JOptionPane.showMessageDialog(null, "SOlICITUD ENTREGADA");
+           ListarTrabajosPendientes();
+           id_lote = 0;
+        } catch (Exception e){
             JOptionPane.showMessageDialog(null, "MENSAJE"+e);
-        
         }
-        }else{JOptionPane.showMessageDialog(null, "Ingrese Una Fecha o Seleccione Un Trabajo");}*/
-       terminar();
-       ValidarLotes();
-       if(lotes == 0){CerrarTrabajo();}
- 
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+        }else{JOptionPane.showMessageDialog(null, "Seleccione Un Trabajo");}
+           
+        
+    }//GEN-LAST:event_aceptarActionPerformed
      
-    private void ListarTrabajos(){
-        ArrayList<ClassTrabajos> result = InsertTrabajosTransformadores.ListarTraIniciadosTras(PN.getText(),JOB.getText());
+    private void ListarTrabajosTrans(){
+        ArrayList<ClassTrabajos> result = SolicitudesBodegaClass.ListarTrabajoSolicitudesBodega(PN.getText(),JOB.getText());
         RecargarTabla(result);  
     }
      private void RecargarTabla(ArrayList<ClassTrabajos> list) {
@@ -586,7 +647,7 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
                   
                   i++;
               }    
-             trab.setModel(new javax.swing.table.DefaultTableModel(
+             trab1.setModel(new javax.swing.table.DefaultTableModel(
                 datos,
                 new String[]{
                 " ","NO. LOTE","P/N","JOB","CLIENTE","ESTANDAR","REVISION","CANTIDAD"
@@ -598,28 +659,83 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
                  return false;
              }
              });
-             TableColumn columna1 = trab.getColumn(" ");
-             columna1.setPreferredWidth(0);
-             TableColumn columna2 = trab.getColumn("NO. LOTE");
+             TableColumn columna1 = trab1.getColumn(" ");
+             columna1.setPreferredWidth(-10);
+             TableColumn columna2 = trab1.getColumn("NO. LOTE");
              columna2.setPreferredWidth(50);
-             TableColumn columna3 = trab.getColumn("P/N");
-             columna3.setPreferredWidth(40);
-             TableColumn columna4 = trab.getColumn("JOB");
-             columna4.setPreferredWidth(40);
-             TableColumn columna5 = trab.getColumn("CLIENTE");
-             columna5.setPreferredWidth(40);
-              TableColumn columna6 = trab.getColumn("REVISION");
-             columna6.setPreferredWidth(40);
-             TableColumn columna7 = trab.getColumn("ESTANDAR");
-             columna7.setPreferredWidth(80);
-             TableColumn columna8 = trab.getColumn("CANTIDAD");
-             columna8.setPreferredWidth(40);
-             
+             TableColumn columna3 = trab1.getColumn("P/N");
+             columna3.setPreferredWidth(50);
+             TableColumn columna4 = trab1.getColumn("JOB");
+             columna4.setPreferredWidth(50);
+             TableColumn columna5 = trab1.getColumn("CLIENTE");
+             columna5.setPreferredWidth(50);
+             TableColumn columna6 = trab1.getColumn("ESTANDAR");
+             columna6.setPreferredWidth(60);
+             TableColumn columna7 = trab1.getColumn("REVISION");
+             columna7.setPreferredWidth(50);
+             TableColumn columna8 = trab1.getColumn("CANTIDAD");
+             columna8.setPreferredWidth(50);
              
 }
      
-    private void ListarProcesos(){
-        ArrayList<ClassTrabajos> result1 = InsertTrabajosTransformadores.ListarProceso(id);
+private void ListarTrabajosPendientes(){
+        ArrayList<ClassTrabajos> result = SolicitudesBodegaClass.ListarTrabajoSolicitudesBodegaPendientes(PN.getText(),JOB.getText());
+        RecargarTabla1(result);  
+    }
+     private void RecargarTabla1(ArrayList<ClassTrabajos> list) {
+         
+              Object[][] datos = new Object[list.size()][9];
+              int i = 0;
+              for(ClassTrabajos t : list)
+              {
+                  datos[i][0] = t.getId();
+                  datos[i][1] = t.getNOLOTE();
+                  datos[i][2] = t.getPN();
+                  datos[i][3] = t.getJob();
+                  datos[i][4] = t.getCliente();
+                  datos[i][5] = t.getEstandar();
+                  datos[i][6] = t.getRevision();
+                  datos[i][7] = t.getQTYPORLOTE();
+                  datos[i][8] = t.getEstado();
+                  
+                  i++;
+              }    
+             trab.setModel(new javax.swing.table.DefaultTableModel(
+                datos,
+                new String[]{
+                " ","NO. LOTE","P/N","JOB","CLIENTE","ESTANDAR","REVISION","CANTIDAD","ESTATUS"
+
+             })
+             {  
+                 @Override
+             public boolean isCellEditable(int row, int column){
+                 return false;
+             }
+             });
+             TableColumn columna1 = trab.getColumn(" ");
+             columna1.setPreferredWidth(-10);
+             TableColumn columna2 = trab.getColumn("NO. LOTE");
+             columna2.setPreferredWidth(50);
+             TableColumn columna3 = trab.getColumn("P/N");
+             columna3.setPreferredWidth(50);
+             TableColumn columna4 = trab.getColumn("JOB");
+             columna4.setPreferredWidth(50);
+             TableColumn columna5 = trab.getColumn("CLIENTE");
+             columna5.setPreferredWidth(50);
+             TableColumn columna6 = trab.getColumn("ESTANDAR");
+             columna6.setPreferredWidth(60);
+             TableColumn columna7 = trab.getColumn("REVISION");
+             columna7.setPreferredWidth(50);
+             TableColumn columna8 = trab.getColumn("CANTIDAD");
+             columna8.setPreferredWidth(50);
+             TableColumn columna9 = trab.getColumn("ESTATUS");
+             columna9.setPreferredWidth(50);
+             
+}     
+     
+     
+   /* private void ListarProcesos(){
+        ArrayList<ClassTrabajos> result1 = InsertTrabajos.ListarProceso(id);
         Listar(result1);  
     }
      private void Listar(ArrayList<ClassTrabajos> list1) {
@@ -648,8 +764,7 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
              TableColumn columna1 = TablaPro.getColumn("CANTIDAD");
              columna1.setPreferredWidth(0);
              TableColumn columna2 = TablaPro.getColumn("FECHA");
-             columna2.setPreferredWidth(10);
-} 
+             columna2.setPreferredWidth(10);}*/
     /**
      * @param args the command line arguments
      */
@@ -667,21 +782,35 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CerrarTrabajo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SolicitudesBodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CerrarTrabajo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SolicitudesBodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CerrarTrabajo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SolicitudesBodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CerrarTrabajo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SolicitudesBodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CerrarTrabajo().setVisible(true);
+                new SolicitudesBodega().setVisible(true);
             }
         });
     }
@@ -690,17 +819,20 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
     private javax.swing.JTextField CANTIDADINFO;
     private javax.swing.JTextField CLIENTEINFO;
     private javax.swing.JTextField ESTANDARINFO;
+    private javax.swing.JTextField FECHA;
     private javax.swing.JTextField JOB;
     private javax.swing.JTextField JOBINFO;
     private javax.swing.JTextField PN;
     private javax.swing.JTextField PNINFO;
+    private javax.swing.JTextField PRIORIDAD;
     private javax.swing.JTextField REVISIONINFO;
-    private javax.swing.JTable TablaPro;
-    private com.toedter.calendar.JDateChooser fechafin;
+    private javax.swing.JButton aceptar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -713,17 +845,19 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField no;
     private javax.swing.JTextField nolote;
     private javax.swing.JTable trab;
+    private javax.swing.JTable trab1;
     // End of variables declaration//GEN-END:variables
 
     private void llenacuainformacion() {
        try {
-           
             //id();
-            ClassTrabajos c = InsertTrabajosTransformadores.buscarTrabajoTrans(Integer.parseInt(String.valueOf(trab.getModel().getValueAt(trab.getSelectedRow(), 0))));
-            id = c.getId();
+            ClassTrabajos c = SolicitudesBodegaClass.buscarTrabajoTrans(Integer.parseInt(String.valueOf(trab1.getModel().getValueAt(trab1.getSelectedRow(), 0))));
+            //id = c.getId();
             no.setText(String.valueOf(c.getId()));
             PNINFO.setText(c.getPN());
             JOBINFO.setText(c.getJob());
@@ -732,11 +866,20 @@ public class CerrarTrabajo extends javax.swing.JInternalFrame {
             CANTIDADINFO.setText(String.valueOf(c.getQTYPORLOTE()));
             REVISIONINFO.setText(c.getRevision());
             nolote.setText(String.valueOf(c.getNOLOTE()));
-            id_trabajo = c.getId_trabajo();
-            ListarProcesos();
+            PRIORIDAD.setText(c.getPrioridadStrin());
+           // ListarProcesos();
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "error"+e);
         }
     }
+    
+    
+    
+     public void Cfecha() {                                      
+         DateFormat dateFormat = new SimpleDateFormat("dd/MM/YY h:mm:ss ");
+         Calendar cal = Calendar.getInstance();
+         FECHA.setText(dateFormat.format(cal.getTime()));
+        }  
+       
 }

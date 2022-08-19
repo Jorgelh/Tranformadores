@@ -42,7 +42,234 @@ public class ClassTrabajos {
     private String Nota;
     private String Descripcion;
     private int estadoeje;
+    private int trabajadopor;
+    private int id_listaEmpleados;
+    private String Nombres;
+    private int proposito;
+    private int consecuencia;
+    private String integridad;
+    private int r_foto;
+    private int r_materia;
+    private int r_imprimir;
+    private int solicita;
+    private int aprueba;
+    private String cambio;
+    private String observaciones;
+    private int id_trabajo;
+    private String propositoS;
+    private String consecuenciaS;
+    private String integridadS;
+    private String r_fotoS;
+    private String r_materiaS;
+    private String r_imprimirS;
+    private String solicitaS;
+    private String apruebaS;
+    private String fecha2;
+    private String realizadopor;
+    private int Meses;
 
+    public int getMeses() {
+        return Meses;
+    }
+
+    public void setMeses(int Meses) {
+        this.Meses = Meses;
+    }
+    
+
+
+    public String getRealizadopor() {
+        return realizadopor;
+    }
+
+    public void setRealizadopor(String realizadopor) {
+        this.realizadopor = realizadopor;
+    }
+    
+    
+
+    public int getId_trabajo() {
+        return id_trabajo;
+    }
+
+    public void setId_trabajo(int id_trabajo) {
+        this.id_trabajo = id_trabajo;
+    }
+
+    
+    public String getFecha2() {
+        return fecha2;
+    }
+
+    public void setFecha2(String fecha2) {
+        this.fecha2 = fecha2;
+    }
+    
+    public String getPropositoS() {
+        return propositoS;
+    }
+
+    public void setPropositoS(String propositoS) {
+        this.propositoS = propositoS;
+    }
+
+    public String getConsecuenciaS() {
+        return consecuenciaS;
+    }
+
+    public void setConsecuenciaS(String consecuenciaS) {
+        this.consecuenciaS = consecuenciaS;
+    }
+
+    public String getIntegridadS() {
+        return integridadS;
+    }
+
+    public void setIntegridadS(String integridadS) {
+        this.integridadS = integridadS;
+    }
+
+    public String getR_fotoS() {
+        return r_fotoS;
+    }
+
+    public void setR_fotoS(String r_fotoS) {
+        this.r_fotoS = r_fotoS;
+    }
+
+    public String getR_materiaS() {
+        return r_materiaS;
+    }
+
+    public void setR_materiaS(String r_materiaS) {
+        this.r_materiaS = r_materiaS;
+    }
+
+    public String getR_imprimirS() {
+        return r_imprimirS;
+    }
+
+    public void setR_imprimirS(String r_imprimirS) {
+        this.r_imprimirS = r_imprimirS;
+    }
+
+    public String getSolicitaS() {
+        return solicitaS;
+    }
+
+    public void setSolicitaS(String solicitaS) {
+        this.solicitaS = solicitaS;
+    }
+
+    public String getApruebaS() {
+        return apruebaS;
+    }
+
+    public void setApruebaS(String apruebaS) {
+        this.apruebaS = apruebaS;
+    }
+    
+    
+
+    public int getProposito() {
+        return proposito;
+    }
+
+    public void setProposito(int proposito) {
+        this.proposito = proposito;
+    }
+
+    public int getConsecuencia() {
+        return consecuencia;
+    }
+
+    public void setConsecuencia(int consecuencia) {
+        this.consecuencia = consecuencia;
+    }
+
+    public String getIntegridad() {
+        return integridad;
+    }
+
+    public void setIntegridad(String integridad) {
+        this.integridad = integridad;
+    }
+
+    public int getR_foto() {
+        return r_foto;
+    }
+
+    public void setR_foto(int r_foto) {
+        this.r_foto = r_foto;
+    }
+
+    public int getR_materia() {
+        return r_materia;
+    }
+
+    public void setR_materia(int r_materia) {
+        this.r_materia = r_materia;
+    }
+
+    public int getR_imprimir() {
+        return r_imprimir;
+    }
+
+    public void setR_imprimir(int r_imprimir) {
+        this.r_imprimir = r_imprimir;
+    }
+
+    public int getSolicita() {
+        return solicita;
+    }
+
+    public void setSolicita(int solicita) {
+        this.solicita = solicita;
+    }
+
+    public int getAprueba() {
+        return aprueba;
+    }
+
+    public void setAprueba(int aprueba) {
+        this.aprueba = aprueba;
+    }
+
+    public String getCambio() {
+        return cambio;
+    }
+
+    public void setCambio(String cambio) {
+        this.cambio = cambio;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+    public int getId_listaEmpleados() {
+        return id_listaEmpleados;
+    }
+    public void setId_listaEmpleados(int id_listaEmpleados) {
+        this.id_listaEmpleados = id_listaEmpleados;
+    }
+    public String getNombres() {
+        return Nombres;
+    }
+    public void setNombres(String Nombres) {
+        this.Nombres = Nombres;
+    }
+    public int getTrabajadopor() {
+        return trabajadopor;
+    }
+
+    public void setTrabajadopor(int trabajadopor) {
+        this.trabajadopor = trabajadopor;
+    }
+    
     public int getEstadoeje() {
         return estadoeje;
     }
@@ -77,9 +304,6 @@ public class ClassTrabajos {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    
-    
-
     public String getPrioridadStrin() {
         return prioridadStrin;
     }

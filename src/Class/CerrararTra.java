@@ -17,6 +17,17 @@ public class CerrararTra {
     private int no;
     private String nota;
     private int Estado;
+    private String FechaS;
+
+    public String getFechaS() {
+        return FechaS;
+    }
+
+    public void setFechaS(String FechaS) {
+        this.FechaS = FechaS;
+    }
+    
+    
 
     public int getEstado() {
         return Estado;

@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SolicitudesMateriales;
+package SinUsoBK;
 
 import BD.BD;
 import BD.InsertTrabajosTransformadores;
-import BD.InsertarEjemplos;
-import static BD.InsertarEjemplos.InsertarEjemplos;
 import BD.InsertarProductosTaller;
 import BD.ProductosTaller;
 import Class.ClassTrabajos;
-import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,32 +31,26 @@ import javax.swing.table.TableColumn;
  *
  * @author jluis
  */
-public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
-
+public class InicioSolicItudesBK extends javax.swing.JInternalFrame {
     int id;
-    int productoyaagregado;
     int productoagregado;
-    int productoagregadoejemplo;
     int depto;
     int estado = 0;
-    int Tipo;
     DefaultTableModel temp;
-
     /**
      * Creates new form InicioSolicutudes
      */
-    public InicioSolicItudesEjemplos() {
+    public InicioSolicItudesBK() {
         initComponents();
         ListarTrabajos();
         selectusuario();
-        ListarEjemplos();
         jButton1.setEnabled(false);
         PN.requestFocus();
     }
-
+    
     private void llenacuainformacion() {
-        try {
-
+       try {
+           
             ClassTrabajos c = InsertTrabajosTransformadores.buscarTrabajoTrans(Integer.parseInt(String.valueOf(trab.getModel().getValueAt(trab.getSelectedRow(), 0))));
             id = c.getId();
             PNINFO.setText(c.getPN());
@@ -71,37 +62,19 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
             nolote.setText(String.valueOf(c.getNOLOTE()));
             PRIORIDAD.setText(c.getPrioridadStrin());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "error" + e);
+            JOptionPane.showMessageDialog(null, "error"+e);
         }
     }
-
-    private void llenaInformacionEjemplo() {
-        try {
-
-            ClassTrabajos c = InsertarEjemplos.buscarEjemplo(Integer.parseInt(String.valueOf(ejemplos.getModel().getValueAt(ejemplos.getSelectedRow(), 0))));
-            id = c.getId();
-            PNINFO.setText(c.getPN());
-            JOBINFO.setText(c.getJob());
-            CLIENTEINFO.setText(c.getCliente());
-            ESTANDARINFO.setText(c.getEstandar());
-            CANTIDADINFO.setText(String.valueOf(c.getQtyproduccion()));
-            REVISIONINFO.setText(c.getRevision());
-            nolote.setText("EJEMPLO");
-            PRIORIDAD.setText(c.getPrioridadStrin());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "error" + e);
-        }
-    }
-
-    public void VerificarComponentesAgregados() {
+    
+     public void VerificarComponentesAgregados(){
         int compo = (Integer.parseInt(String.valueOf(PRODUCTOS.getModel().getValueAt(PRODUCTOS.getSelectedRow(), 0))));
         try {
             Connection c = BD.getConnection();
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("select COUNT(*) from PEDIDOS_TRABAJOS where ID_LOTE = " + id + " and ID_PRODUCTO =" + compo);
-            while (rs.next()) {
-                int lastID = rs.getInt(1);
-                productoagregado = lastID;
+            ResultSet rs = stmt.executeQuery("select COUNT(*) from PEDIDOS_TRABAJOS where ID_LOTE = "+id+" and ID_PRODUCTO ="+compo);
+            while (rs.next()){
+               int lastID = rs.getInt(1);
+               productoagregado = lastID;
             }
             rs.close();
             stmt.close();
@@ -110,28 +83,8 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
             System.out.println(error);
         }
     }
-
-    public void VerificarComponentesAgregadosEjemplos() {
-        int compo = (Integer.parseInt(String.valueOf(PRODUCTOS.getModel().getValueAt(PRODUCTOS.getSelectedRow(), 0))));
-        try {
-            Connection c = BD.getConnection();
-            Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("select COUNT(*) from PEDIDOS_TRABAJOS where ID = " + id + " and tipo = 2 and ID_PRODUCTO =" + compo);
-            while (rs.next()) {
-                int lastID = rs.getInt(1);
-                productoagregado = lastID;
-            }
-            rs.close();
-            stmt.close();
-            c.close();
-        } catch (SQLException error) {
-            System.out.println(error);
-        }
-    }
-
-    public void insertarNuevoProcuto() {
-        int P; 
-        
+    
+      public void insertarNuevoProcuto() {
         try {
             int idproducto = (Integer.parseInt(String.valueOf(PRODUCTOS.getModel().getValueAt(PRODUCTOS.getSelectedRow(), 0))));
             ProductosTaller m = new ProductosTaller();
@@ -139,41 +92,22 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
             m.setIdlote(id);
             SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy hh:mm:s");
             String fecha1 = FECHAAUTO.getText();
-            Date fecha = df.parse(fecha1);
+            Date fecha=df.parse(fecha1);
             m.setFecha(fecha);
             m.setCantidad(Integer.parseInt(CANTIDADINFO.getText()));
             m.setDepto(depto);
-            m.setTipo(Tipo);
             InsertarProductosTaller.insertarNuevoProducto(m);
         } catch (SQLException e) {
             System.out.println("Error BD:" + e);
         } catch (ParseException ex) {
-            Logger.getLogger(InicioSolicItudesEjemplos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InicioSolicItudesBK.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public void insertarNuevoProcutoEjemplo() {
-        try {
-            int idproducto = (Integer.parseInt(String.valueOf(PRODUCTOS.getModel().getValueAt(PRODUCTOS.getSelectedRow(), 0))));
-            ProductosTaller m = new ProductosTaller();
-            m.setIdproducto(idproducto);
-            m.setIdlote(id);
-            //SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy hh:mm:s");
-            //String fecha1 = FECHAAUTO.getText();
-            //Date fecha=df.parse(fecha1);
-            //m.setFecha(fecha);
-            m.setCantidad(Integer.parseInt(CANTIDADINFO.getText()));
-            m.setDepto(depto);
-            m.setTipo(Tipo);
-            InsertarProductosTaller.insertarNuevoProductoEjemplo(m);
-        } catch (SQLException e) {
-            System.out.println("Error BD:" + e);
-        }
-    }
-
+      
+      
     public void remover() {
         try {
-            int idproducto = (Integer.parseInt(String.valueOf(YasolicitadosE.getModel().getValueAt(YasolicitadosE.getSelectedRow(), 0))));
+            int idproducto = (Integer.parseInt(String.valueOf(Yasolicitados.getModel().getValueAt(Yasolicitados.getSelectedRow(), 0))));
             ProductosTaller m = new ProductosTaller();
             m.setIdlote(id);
             m.setDepto(depto);
@@ -182,21 +116,8 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
         } catch (Exception e) {
             System.out.println("Error BD:" + e.getMessage());
         }
-    }
-
-    public void removerEjemplo() {
-        try {
-            int idproducto = (Integer.parseInt(String.valueOf(YasolicitadosE.getModel().getValueAt(YasolicitadosE.getSelectedRow(), 0))));
-            ProductosTaller m = new ProductosTaller();
-            m.setIdlote(id);
-            m.setDepto(depto);
-            m.setIdproducto(idproducto);
-            InsertarProductosTaller.deleteProductoEjemplo(m);
-        } catch (Exception e) {
-            System.out.println("Error BD:" + e.getMessage());
-        }
-    }
-
+    }  
+    
     public void removerPorCancelacion() {
         try {
             //int idproducto = (Integer.parseInt(String.valueOf(Yasolicitados.getModel().getValueAt(Yasolicitados.getSelectedRow(), 0))));
@@ -207,34 +128,22 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
         } catch (Exception e) {
             System.out.println("Error BD:" + e.getMessage());
         }
-    }
-
-    public void removerPorCancelacionEjemplo() {
-        try {
-            //int idproducto = (Integer.parseInt(String.valueOf(Yasolicitados.getModel().getValueAt(Yasolicitados.getSelectedRow(), 0))));
-            ProductosTaller m = new ProductosTaller();
-            m.setIdlote(id);
-            m.setDepto(depto);
-            InsertarProductosTaller.deletePorCancelacionEjemplo(m);
-        } catch (Exception e) {
-            System.out.println("Error BD:" + e.getMessage());
-        }
-    }
-
-    public void confirmar() {
-
-        if (id != 0 && PNINFO.getText().compareTo("") != 0) {
-            try {
-
+    }  
+      
+    public void confirmar(){
+    
+     if (id!=0 && PNINFO.getText().compareTo("")!=0){
+                try {
+                     
                 Connection cnn = BD.getConnection();
                 PreparedStatement ps = null;
-                ps = cnn.prepareStatement("UPDATE PEDIDOS_TRABAJOS set ESTADO = 1 where ID_LOTE=" + id + " and ESTADO = 0 and DEPTO =" + depto);
+                ps = cnn.prepareStatement("UPDATE PEDIDOS_TRABAJOS set ESTADO = 1 where ID_LOTE="+id+" and ESTADO = 0 and DEPTO ="+depto);
                 //ps.setInt(1,id);
                 //PS.set
                 //int rowsUpdated = 
                 ps.executeUpdate();
                 cnn.close();
-                ps.close();
+                ps.close(); 
                 JOptionPane.showMessageDialog(null, "PEDIDO CONFIRMADO CORECTAMENTE");
                 limpiar();
             } catch (Exception e) {
@@ -243,36 +152,12 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(null, "No tiene Nada Que Agregar");
         }
-    }
-
-    public void confirmarEjemplo() {
-
-        if (id != 0 && PNINFO.getText().compareTo("") != 0) {
-            try {
-
-                Connection cnn = BD.getConnection();
-                PreparedStatement ps = null;
-                ps = cnn.prepareStatement("UPDATE PEDIDOS_TRABAJOS set ESTADO = 1 where ID=" + id + " and ESTADO = 0 and DEPTO =" + depto);
-                //ps.setInt(1,id);
-                //PS.set
-                //int rowsUpdated = 
-                ps.executeUpdate();
-                cnn.close();
-                ps.close();
-                JOptionPane.showMessageDialog(null, "PEDIDO CONFIRMADO CORECTAMENTE");
-                limpiar();
-            } catch (Exception e) {
-                System.out.println("Error BD:" + e.getMessage());
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No tiene Nada Que Agregar");
-        }
-    }
-
-    public void selectusuario() {
+    }  
+ 
+      public void selectusuario() {
         String a = System.getProperty("user.name");//usar usuario de windows
         if (a.equals("jluis")) {
-            depto = 10;  //cambio en HistorialStatus,InicioSolicitudesEjemplos,Status
+            depto = 0;
         } //INFORMATICA
         else if (a.equals("ehernandez")) {
             depto = 1;
@@ -301,53 +186,46 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
         else if (a.equals("ingenieria")) {
             depto = 9;
         }//RELACION CON EL CLIENTE 
-        else if (a.equals("taller")) {
+        else if(a.equals("taller")){
             depto = 10;
         }//TALLER
-        else if (a.equals("Sotano")) {
+        else if(a.equals("Sotano")){
             depto = 10;
         }//TALLER
-        else if (a.equals("apacheco")) {
+        else if(a.equals("apacheco")){
             depto = 11;
-        } else if (a.equals("deptochips")) {
+        }
+        else if(a.equals("deptochips")){
             depto = 12;
-        } else if (a.equals("molding")) {
-            depto = 13;
+            
         }
     }
-
-    public void Cfecha() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/YY HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-        FECHAAUTO.setText(dateFormat.format(cal.getTime()));
-    }
-
-    private void limpiar() {
-        PNINFO.setText("");
-        JOBINFO.setText("");
-        CLIENTEINFO.setText("");
-        ESTANDARINFO.setText("");
-        REVISIONINFO.setText("");
-        nolote.setText("");
-        CANTIDADINFO.setText("");
-        PRIORIDAD.setText("");
-        FECHAAUTO.setText("");
-        clearProductos();
-        clearProductosAgregados();
-        trab.setEnabled(true);
-        ejemplos.setEnabled(true);
-        PN.setEnabled(true);
-        PN1.setEnabled(true);
-        estado = 0;
-        jButton1.setEnabled(false);
-        PN.requestFocus();
-        pestañas.setEnabled(true);
-        PN.setEnabled(true);
-        PN1.setEnabled(true);
-        
-    }
-
-    public void clearProductos() {
+      
+      public void Cfecha() {                                      
+         DateFormat dateFormat = new SimpleDateFormat("dd/MM/YY HH:mm:ss");
+         Calendar cal = Calendar.getInstance();
+         FECHAAUTO.setText(dateFormat.format(cal.getTime()));
+        }  
+      
+      
+      private void limpiar(){
+      PNINFO.setText("");
+      JOBINFO.setText("");
+      CLIENTEINFO.setText("");
+      ESTANDARINFO.setText("");
+      REVISIONINFO.setText("");
+      nolote.setText("");
+      CANTIDADINFO.setText("");
+      PRIORIDAD.setText("");
+      FECHAAUTO.setText("");
+      clearProductos();
+      clearProductosAgregados();
+      trab.setEnabled(true);estado = 0;
+      jButton1.setEnabled(false);
+      PN.requestFocus();
+      }
+      
+      public void clearProductos() {
         try {
             temp = (DefaultTableModel) PRODUCTOS.getModel();
             int a = temp.getRowCount();
@@ -358,10 +236,10 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
         } catch (Exception e) {
         }
     }
-
+      
     public void clearProductosAgregados() {
         try {
-            temp = (DefaultTableModel) YasolicitadosE.getModel();
+            temp = (DefaultTableModel) Yasolicitados.getModel();
             int a = temp.getRowCount();
             for (int i = 0; i < a; i++) {
                 temp.removeRow(i);
@@ -369,25 +247,7 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
             }
         } catch (Exception e) {
         }
-    }
-
-    /*public void VerificarComponentesantesderemover() {
-        int soli = (Integer.parseInt(String.valueOf(Yasolicitados.getModel().getValueAt(Yasolicitados.getSelectedRow(), 0))));
-        try {
-            Connection c = BD.getConnection();
-            Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("select COUNT(*) from PEDIDOS_TRABAJOS where ID_LOTE = " + id + " and depto = " + depto + " and ID_PRODUCTO =" + soli + " and estado = 1");
-            while (rs.next()) {
-                int ID = rs.getInt(1);
-                productoyaagregado = ID;
-            }
-            rs.close();
-            stmt.close();
-            c.close();
-        } catch (SQLException error) {
-            System.out.println(error);
-        }
-    }*/
+    }  
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -395,184 +255,110 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-
-    private void ListarTrabajos() {
+  
+    private void ListarTrabajos(){
         ArrayList<ClassTrabajos> result = InsertTrabajosTransformadores.ListarTrabajosSolicitudesMat(PN.getText());
-        RecargarTabla(result);
+        RecargarTabla(result);  
     }
-
-    private void RecargarTabla(ArrayList<ClassTrabajos> list) {
-
-        Object[][] datos = new Object[list.size()][4];
-        int i = 0;
-        for (ClassTrabajos t : list) {
-            datos[i][0] = t.getId();
-            datos[i][1] = t.getPN();
-            datos[i][2] = t.getJob();
-            datos[i][3] = t.getNOLOTE();
-            i++;
-        }
-        trab.setModel(new javax.swing.table.DefaultTableModel(
+     private void RecargarTabla(ArrayList<ClassTrabajos> list) {
+         
+              Object[][] datos = new Object[list.size()][4];
+              int i = 0;
+              for(ClassTrabajos t : list)
+              {
+                  datos[i][0] = t.getId();
+                  datos[i][1] = t.getPN();
+                  datos[i][2] = t.getJob();
+                  datos[i][3] = t.getNOLOTE();
+                  i++;
+              }    
+             trab.setModel(new javax.swing.table.DefaultTableModel(
                 datos,
                 new String[]{
-                    " ", "P/N", "JOB", "NO. LOTE"}) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        });
-        TableColumn columna1 = trab.getColumn(" ");
-        columna1.setPreferredWidth(-20);
-        TableColumn columna2 = trab.getColumn("P/N");
-        columna2.setPreferredWidth(75);
-        TableColumn columna3 = trab.getColumn("JOB");
-        columna3.setPreferredWidth(75);
-        TableColumn columna4 = trab.getColumn("NO. LOTE");
-        columna4.setPreferredWidth(75);
-    }
-
-    private void ListarEjemplos() {
-        ArrayList<ClassTrabajos> result = InsertarProductosTaller.ListarEjemplos(PN1.getText());
-        RecargarTablaEjemplo(result);
-    }
-
-    private void RecargarTablaEjemplo(ArrayList<ClassTrabajos> list) {
-
-        Object[][] datos = new Object[list.size()][4];
-        int i = 0;
-        for (ClassTrabajos t : list) {
-            datos[i][0] = t.getId();
-            datos[i][1] = t.getPN();
-            datos[i][2] = t.getJob();
-            datos[i][3] = t.getCliente();
-            i++;
-        }
-        ejemplos.setModel(new javax.swing.table.DefaultTableModel(
-                datos,
-                new String[]{
-                    " ", "P/N", "JOB", "CLIENTE"}) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        });
-        TableColumn columna1 = ejemplos.getColumn(" ");
-        columna1.setPreferredWidth(-20);
-        TableColumn columna2 = ejemplos.getColumn("P/N");
-        columna2.setPreferredWidth(75);
-        TableColumn columna3 = ejemplos.getColumn("JOB");
-        columna3.setPreferredWidth(75);
-        TableColumn columna4 = ejemplos.getColumn("CLIENTE");
-        columna4.setPreferredWidth(75);
-    }
-
-    private void ListarProductos() {
+                " ","P/N","JOB","NO. LOTE"           })
+             {  
+                 @Override
+             public boolean isCellEditable(int row, int column){
+                 return false;
+             }
+             });
+             TableColumn columna1 = trab.getColumn(" ");
+             columna1.setPreferredWidth(-20);
+             TableColumn columna2 = trab.getColumn("P/N");
+             columna2.setPreferredWidth(75);
+             TableColumn columna3 = trab.getColumn("JOB");
+             columna3.setPreferredWidth(75);
+             TableColumn columna4 = trab.getColumn("NO. LOTE");
+             columna4.setPreferredWidth(75);
+}
+    
+private void ListarProductos(){
         ArrayList<ClassTrabajos> result = InsertTrabajosTransformadores.ListarProductos(depto);
-        RecargarTablaProductos(result);
+        RecargarTablaProductos(result);  
     }
-
-    private void RecargarTablaProductos(ArrayList<ClassTrabajos> list) {
-
-        Object[][] datos = new Object[list.size()][4];
-        int i = 0;
-        for (ClassTrabajos t : list) {
-            datos[i][0] = t.getId();
-            datos[i][1] = t.getDescripcion();
-
-            i++;
-        }
-        PRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
+     private void RecargarTablaProductos(ArrayList<ClassTrabajos> list) {
+         
+              Object[][] datos = new Object[list.size()][4];
+              int i = 0;
+              for(ClassTrabajos t : list)
+              {
+                  datos[i][0] = t.getId();
+                  datos[i][1] = t.getDescripcion();
+                 
+                  i++;
+              }    
+             PRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
                 datos,
                 new String[]{
-                    "ID", "DESCRIPICION"}) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        });
-        TableColumn columna1 = PRODUCTOS.getColumn("ID");
-        columna1.setPreferredWidth(-20);
-        TableColumn columna2 = PRODUCTOS.getColumn("DESCRIPICION");
-        columna2.setPreferredWidth(275);/*
+                "ID","DESCRIPICION"           })
+             {  
+                 @Override
+             public boolean isCellEditable(int row, int column){
+                 return false;
+             }
+             });
+             TableColumn columna1 = PRODUCTOS.getColumn("ID");
+             columna1.setPreferredWidth(-20);
+             TableColumn columna2 = PRODUCTOS.getColumn("DESCRIPICION");
+             columna2.setPreferredWidth(275);/*
              TableColumn columna3 = trab.getColumn("JOB");
              columna3.setPreferredWidth(75);
              TableColumn columna4 = trab.getColumn("NO. LOTE");
              columna4.setPreferredWidth(75);*/
+}     
+    
+private void ListarProductosYaSolicitados(){
+        ArrayList<ClassTrabajos> result = InsertTrabajosTransformadores.ListarProductosYaSolicitados(id,depto);
+        ProductosSolicitados(result);  
     }
-
-    private void ListarProductosYaSolicitados() {
-        ArrayList<ClassTrabajos> result = InsertTrabajosTransformadores.ListarProductosYaSolicitados(id, depto);
-        ProductosSolicitados(result);
-    }
-
-    private void ProductosSolicitados(ArrayList<ClassTrabajos> list) {
-
-        Object[][] datos = new Object[list.size()][4];
-        int i = 0;
-        for (ClassTrabajos t : list) {
-            datos[i][0] = t.getId();
-            datos[i][1] = t.getDescripcion();
-            datos[i][2] = t.getFecha();
-            datos[i][3] = t.getCantidad();
-            i++;
-        }
-        YasolicitadosE.setModel(new javax.swing.table.DefaultTableModel(
+     private void ProductosSolicitados(ArrayList<ClassTrabajos> list) {
+         
+              Object[][] datos = new Object[list.size()][4];
+              int i = 0;
+              for(ClassTrabajos t : list)
+              {
+                  datos[i][0] = t.getId();
+                  datos[i][1] = t.getDescripcion();
+                 
+                  i++;
+              }    
+             Yasolicitados.setModel(new javax.swing.table.DefaultTableModel(
                 datos,
                 new String[]{
-                    "ID", "DESCRIPCION", "FECHA SOLICITADO","CANTIDAD"}) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        });
-        TableColumn columna1 = YasolicitadosE.getColumn("ID");
-        columna1.setPreferredWidth(0);
-        TableColumn columna2 = YasolicitadosE.getColumn("DESCRIPCION");
-        columna2.setPreferredWidth(200);
-        TableColumn columna3 = YasolicitadosE.getColumn("FECHA SOLICITADO");
-        columna3.setPreferredWidth(200);
-        TableColumn columna4 = YasolicitadosE.getColumn("CANTIDAD");
-        columna4.setPreferredWidth(200);
-
-    }
+                "ID","DESCRIPICION"           })
+             {  
+                 @Override
+             public boolean isCellEditable(int row, int column){
+                 return false;
+             }
+             });
+             TableColumn columna1 = PRODUCTOS.getColumn("ID");
+             columna1.setPreferredWidth(-20);
+             TableColumn columna2 = PRODUCTOS.getColumn("DESCRIPICION");
+             columna2.setPreferredWidth(275);
+           
+}     
     
-    
-    private void ListarProductosYaSolicitadosEje() {
-        ArrayList<ClassTrabajos> result = InsertTrabajosTransformadores.ListarProductosYaSolicitadosEjemplo(id, depto);
-        ProductosSolicitadosEje(result);
-    }
-
-    private void ProductosSolicitadosEje(ArrayList<ClassTrabajos> list) {
-
-        Object[][] datos = new Object[list.size()][4];
-        int i = 0;
-        for (ClassTrabajos t : list) {
-            datos[i][0] = t.getId();
-            datos[i][1] = t.getDescripcion();
-            datos[i][2] = t.getFecha();
-            datos[i][3] = t.getCantidad();
-            i++;
-        }
-        YasolicitadosE.setModel(new javax.swing.table.DefaultTableModel(
-                datos,
-                new String[]{
-                    "ID", "DESCRIPCION", "FECHA SOLICITADO","CANTIDAD"}) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        });
-        TableColumn columna1 = YasolicitadosE.getColumn("ID");
-        columna1.setPreferredWidth(0);
-        TableColumn columna2 = YasolicitadosE.getColumn("DESCRIPCION");
-        columna2.setPreferredWidth(200);
-        TableColumn columna3 = YasolicitadosE.getColumn("FECHA SOLICITADO");
-        columna3.setPreferredWidth(200);
-        TableColumn columna4 = YasolicitadosE.getColumn("CANTIDAD");
-        columna4.setPreferredWidth(200);
-
-    }
-
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -608,19 +394,14 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
         PRODUCTOS = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        YasolicitadosE = new javax.swing.JTable();
+        Yasolicitados = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        pestañas = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         trab = new javax.swing.JTable();
         PN = new javax.swing.JTextField();
-        jPanel12 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        ejemplos = new javax.swing.JTable();
-        PN1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
@@ -692,7 +473,7 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JOBINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -784,6 +565,7 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("CANTIDAD");
 
+        CANTIDADINFO.setEditable(false);
         CANTIDADINFO.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         CANTIDADINFO.setForeground(new java.awt.Color(0, 102, 255));
 
@@ -821,7 +603,7 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PRIORIDAD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -879,7 +661,7 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jButton1.setText("AGREGAR SOLICITUD");
@@ -918,27 +700,27 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("PARTES SOLICITADAS"));
 
-        YasolicitadosE.setModel(new javax.swing.table.DefaultTableModel(
+        Yasolicitados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "No.", "DESCRIPCION", "CANTIDAD"
+                "No.", "DESCRIPCION"
             }
         ));
-        YasolicitadosE.addMouseListener(new java.awt.event.MouseAdapter() {
+        Yasolicitados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                YasolicitadosEMouseClicked(evt);
+                YasolicitadosMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(YasolicitadosE);
+        jScrollPane3.setViewportView(Yasolicitados);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -1001,24 +783,6 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
                 .addGap(12, 12, 12))
         );
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel1.setText("SOLICITUD DE PRODUCTOS A TALLER");
-
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancelar.png"))); // NOI18N
-        jButton3.setText("CERRAR");
-        jButton3.setFocusable(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        pestañas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pestañasMouseClicked(evt);
-            }
-        });
-
         jPanel5.setBackground(new java.awt.Color(51, 204, 255));
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "BUSCAR P/N", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(204, 0, 0))); // NOI18N
         jPanel5.setForeground(new java.awt.Color(153, 153, 153));
@@ -1055,7 +819,7 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(PN, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 97, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -1069,68 +833,26 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        pestañas.addTab("TRABAJOS", jPanel5);
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel1.setText("SOLICITUD DE PRODUCTOS A TALLER");
 
-        jPanel12.setBackground(new java.awt.Color(51, 204, 255));
-        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "BUSCAR P/N EJEMPLOS", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(204, 0, 0))); // NOI18N
-        jPanel12.setForeground(new java.awt.Color(153, 153, 153));
-
-        ejemplos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "P/N", "LOTE", "JOB"
-            }
-        ));
-        ejemplos.setToolTipText("");
-        ejemplos.setFocusable(false);
-        ejemplos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ejemplosMouseClicked(evt);
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancelar.png"))); // NOI18N
+        jButton3.setText("CERRAR");
+        jButton3.setFocusable(false);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
             }
         });
-        jScrollPane4.setViewportView(ejemplos);
-
-        PN1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                PN1KeyReleased(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addComponent(PN1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(PN1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        pestañas.addTab("EJEMPLOS", jPanel12);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pestañas, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(12, 12, 12))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -1151,12 +873,10 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
                         .addGap(26, 26, 26)
                         .addComponent(jLabel1)))
                 .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(pestañas))
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1176,142 +896,73 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void PNKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PNKeyReleased
-        ListarTrabajos();
+       ListarTrabajos();
     }//GEN-LAST:event_PNKeyReleased
     private void trabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_trabMouseClicked
-        Tipo = 1;
-        if (estado == 0) {
+            if(estado ==0){
             llenacuainformacion();
             ListarProductos();
-            ListarProductosYaSolicitados();//error
+            ListarProductosYaSolicitados();
             Cfecha();
-        }
+            }
     }//GEN-LAST:event_trabMouseClicked
 
     private void PRODUCTOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PRODUCTOSMouseClicked
-
+        
         if (evt.getClickCount() > 1) {
-
-            if (Tipo == 1) {
-                VerificarComponentesAgregados();
-                Cfecha();
-                if (productoagregado == 0) {
-                    trab.setEnabled(false);
-                    PN.setEnabled(false);
-                    pestañas.setEnabled(false);
-                    estado = 1;
-                    trab.clearSelection();
-                    jButton1.setEnabled(true);
-                    insertarNuevoProcuto();
-                    ListarProductosYaSolicitados();
-                } else {
-                    JOptionPane.showMessageDialog(null, "PRODUCTO YA SOLICITADO");
-                }
-            } else if (Tipo == 2) {
-                VerificarComponentesAgregadosEjemplos();
-                if (productoagregadoejemplo == 0) {
-                    ejemplos.setEnabled(false);
-                    PN1.setEnabled(false);
-                    pestañas.setEnabled(false);
-                    estado = 1;
-                    ejemplos.clearSelection();
-                    jButton1.setEnabled(true);
-                    insertarNuevoProcutoEjemplo();
-                    ListarProductosYaSolicitadosEje();
-                } else {
-                    JOptionPane.showMessageDialog(null, "PRODUCTO YA SOLICITADO");
-                }
-            }
+            Cfecha();
+            trab.setEnabled(false);
+            estado = 1;
+            trab.clearSelection();
+            jButton1.setEnabled(true);
+            VerificarComponentesAgregados();
+            if(productoagregado == 0){insertarNuevoProcuto();ListarProductosYaSolicitados();}else{JOptionPane.showMessageDialog(null, "EL PRODUCTO YA SOLICITADO");}
         }
     }//GEN-LAST:event_PRODUCTOSMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        if (Tipo == 1) {
-            confirmar();
-        } else if (Tipo == 2) {
-            confirmarEjemplo();
-        }
+        
+        confirmar();
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void YasolicitadosEMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_YasolicitadosEMouseClicked
-        if (evt.getClickCount() > 1) {
-            if (Tipo == 1) {
-                    remover();
-                    ListarProductosYaSolicitados();
-                } else if (Tipo == 2) {
-                    removerEjemplo();
-                    ListarProductosYaSolicitados();
-                }
-            }
-    }//GEN-LAST:event_YasolicitadosEMouseClicked
+    private void YasolicitadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_YasolicitadosMouseClicked
+        if (evt.getClickCount() > 1) {remover();ListarProductosYaSolicitados();}
+    }//GEN-LAST:event_YasolicitadosMouseClicked
 
     private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
-
+       
     }//GEN-LAST:event_formInternalFrameClosed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-
-        int resp = JOptionPane.showConfirmDialog(null, "DESEA CANCELAR LA SOLICITUD...");
-        if (JOptionPane.OK_OPTION == resp) {
+       
+        int resp=JOptionPane.showConfirmDialog(null,"Desea Cancelar la Solicitud");
+        if (JOptionPane.OK_OPTION == resp){
             removerPorCancelacion();
-        }
+          }
     }//GEN-LAST:event_formInternalFrameClosing
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (estado == 1) {
-
-            if (Tipo == 1) {
-                int resp = JOptionPane.showConfirmDialog(null, "DESEA CANCELAR LA SOLICITUD...", "CANCELAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                if (JOptionPane.OK_OPTION == resp) {
-                    removerPorCancelacion();
-                    limpiar();
-                } else {
-                }
-            } else if (Tipo == 2) {
-                int resp = JOptionPane.showConfirmDialog(null, "DESEA CANCELAR LA SOLICITUD...", "CANCELAR", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                if (JOptionPane.OK_OPTION == resp) {
-                    removerPorCancelacionEjemplo();
-                    limpiar();
-                } else {
-                }
-
-            }
-        }
+        if(estado==1){
+        int resp=JOptionPane.showConfirmDialog(null,"DESEA CANCELAR LA SOLICITUD...","CANCELAR",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
+        if (JOptionPane.OK_OPTION == resp){
+       removerPorCancelacion();
+       limpiar();
+          }else{}
+        }else{}
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if (estado == 1) {
-            int resp = JOptionPane.showConfirmDialog(null, "DESEA CANCELAR LA SOLICITUD...",
-                    "CANCELAR", JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE);
-            if (JOptionPane.OK_OPTION == resp) {
-                removerPorCancelacion();
-                this.dispose();
-            } else {
-            }
-        } else {
-            this.dispose();
-        }
+       if(estado==1){       
+       int resp = JOptionPane.showConfirmDialog(null, "DESEA CANCELAR LA SOLICITUD...",
+                "CANCELAR", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE);
+          if(JOptionPane.OK_OPTION == resp){
+        removerPorCancelacion(); 
+        this.dispose();}else {}
+       }else{this.dispose();}
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void ejemplosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ejemplosMouseClicked
-        Tipo = 2;
-        if (estado == 0) {
-            llenaInformacionEjemplo();
-            ListarProductos();
-            ListarProductosYaSolicitadosEje();
-            Cfecha();
-        }
-    }//GEN-LAST:event_ejemplosMouseClicked
-
-    private void PN1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PN1KeyReleased
-        ListarEjemplos();
-    }//GEN-LAST:event_PN1KeyReleased
-
-    private void pestañasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pestañasMouseClicked
-
-    }//GEN-LAST:event_pestañasMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1330,13 +981,13 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InicioSolicItudesEjemplos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InicioSolicItudesBK.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InicioSolicItudesEjemplos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InicioSolicItudesBK.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InicioSolicItudesEjemplos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InicioSolicItudesBK.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InicioSolicItudesEjemplos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InicioSolicItudesBK.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -1358,7 +1009,7 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InicioSolicItudesEjemplos().setVisible(true);
+                new InicioSolicItudesBK().setVisible(true);
             }
         });
     }
@@ -1370,13 +1021,11 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField FECHAAUTO;
     private javax.swing.JTextField JOBINFO;
     private javax.swing.JTextField PN;
-    private javax.swing.JTextField PN1;
     private javax.swing.JTextField PNINFO;
     private javax.swing.JTextField PRIORIDAD;
     private javax.swing.JTable PRODUCTOS;
     private javax.swing.JTextField REVISIONINFO;
-    private javax.swing.JTable YasolicitadosE;
-    private javax.swing.JTable ejemplos;
+    private javax.swing.JTable Yasolicitados;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -1393,7 +1042,6 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1405,9 +1053,7 @@ public class InicioSolicItudesEjemplos extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField nolote;
-    private javax.swing.JTabbedPane pestañas;
     private javax.swing.JTable trab;
     // End of variables declaration//GEN-END:variables
 }

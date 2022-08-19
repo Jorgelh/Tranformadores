@@ -36,10 +36,45 @@ public class InsertarProductosTaller {
     cnn.close();
     ps.close();   
     } 
-    public static void insertarNuevoProductoEjemplo(ProductosTaller d) throws SQLException{
+     
+     public static void insertarNuevoProductoReproceso(ProductosTaller d) throws SQLException{
+    Connection cnn = BD.getConnection();
+    PreparedStatement ps = null;
+    ps= cnn.prepareStatement("insert into PEDIDOS_TRABAJOS(id_pedido,id_producto,id_lote,fecha,cantidad,status,estado,depto,tipo,nota) Values(ID_PEDIDO.nextval,?,?,sysdate,?,1,0,?,?,'AGREGADO COMO REPROCESO')");
+    ps.setInt(1, d.getIdproducto());
+    ps.setInt(2, d.getIdlote());
+   /* DateFormat dateFormat = new SimpleDateFormat("dd/MM/YY HH:mm:ss");
+    DateFormat e = dateFormat.format(d.getFecha());
+    ps.setDate(3, d.getFecha());*/
+    //ps.setDate(3,new java.sql.Date(d.getFecha().getTime()));
+    ps.setInt(3, d.getCantidad());
+    ps.setInt(4, d.getDepto());
+    ps.setInt(5, d.getTipo());
+    ps.executeUpdate();
+    cnn.close();
+    ps.close();   
+    } 
+    
+     public static void insertarNuevoProductoEjemplo(ProductosTaller d) throws SQLException{
     Connection cnn = BD.getConnection();
     PreparedStatement ps = null;
     ps= cnn.prepareStatement("insert into PEDIDOS_TRABAJOS(id_pedido,id_producto,id,fecha,cantidad,status,estado,depto,tipo) Values(ID_PEDIDO.nextval,?,?,sysdate,?,1,0,?,?)");
+    ps.setInt(1, d.getIdproducto());
+    ps.setInt(2, d.getIdlote());
+    //ps.setDate(3, (Date) d.getFecha());
+    //ps.setDate(3,new java.sql.Date(d.getFecha().getTime()));
+    ps.setInt(3, d.getCantidad());
+    ps.setInt(4, d.getDepto());
+    ps.setInt(5, d.getTipo());
+    ps.executeUpdate();
+    cnn.close();
+    ps.close();   
+    }  
+     
+    public static void insertarNuevoProductoEjemploreproceso(ProductosTaller d) throws SQLException{
+    Connection cnn = BD.getConnection();
+    PreparedStatement ps = null;
+    ps= cnn.prepareStatement("insert into PEDIDOS_TRABAJOS(id_pedido,id_producto,id,fecha,cantidad,status,estado,depto,tipo,nota) Values(ID_PEDIDO.nextval,?,?,sysdate,?,1,0,?,?,'AGREGADO COMO REPROCESO')");
     ps.setInt(1, d.getIdproducto());
     ps.setInt(2, d.getIdlote());
     //ps.setDate(3, (Date) d.getFecha());
@@ -253,22 +288,22 @@ public class InsertarProductosTaller {
         return list;
     }
         public static ArrayList<ProductosTaller> ListarProductosTrabajo(int a,int b) {
-        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') AS FECHA from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto WHERE  p.depto="+b+" and p.estado = 1 and l.ID_LOTE = "+a);
+        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota,to_char(p.fecha,'dd/mm/yyyy hh:mi:ss') AS FECHA from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto WHERE  p.depto="+b+" and p.estado = 1 and l.ID_LOTE = "+a);
     }
          public static ArrayList<ProductosTaller> ListarProductosTrabajoMasterActualizar(int a) {
-        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota ,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') AS FECHA from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado = 1 and l.ID_LOTE = "+a);
+        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota ,to_char(p.fecha,'dd/mm/yyyy hh:mi:ss') AS FECHA from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado = 1 and l.ID_LOTE = "+a);
     }
        /* public static ArrayList<ProductosTaller> ListarProductosTrabajoMaster(int a) {//master listado de pedidos
         return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado = 1 and l.ID_LOTE = "+a);
     }*/ 
          public static ArrayList<ProductosTaller> ListarProductosTrabajoTerminados(int a) {
-        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota ,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') AS FECHA from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto WHERE p.estado = 2 and l.ID_LOTE = "+a);
+        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota ,to_char(p.fecha,'dd/mm/yyyy hh:mi:ss') AS FECHA from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto WHERE p.estado = 2 and l.ID_LOTE = "+a);
     }  
          public static ArrayList<ProductosTaller> ListarProductosTrabajoEjemplo(int a,int b) {
-        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota ,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') AS FECHA from pedidos_trabajos p inner join ejemplos_trabajo t on t.id = p.id  join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado = 1 and p.depto="+b+" and t.ID = "+a);
+        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota ,to_char(p.fecha,'dd/mm/yyyy hh:mi:ss') AS FECHA from pedidos_trabajos p inner join ejemplos_trabajo t on t.id = p.id  join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado = 1 and p.depto="+b+" and t.ID = "+a);
     }
       public static ArrayList<ProductosTaller> ListarProductosTrabajoEjemploMasterActualizar(int a) {
-        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota ,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') AS FECHA from pedidos_trabajos p inner join ejemplos_trabajo t on t.id = p.id  join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado = 1 and t.ID = "+a);
+        return Prod("select p.id_pedido,d.descripcion,p.cantidad,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS, p.nota ,to_char(p.fecha,'dd/mm/yyyy hh:mi:ss') AS FECHA from pedidos_trabajos p inner join ejemplos_trabajo t on t.id = p.id  join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado = 1 and t.ID = "+a);
     }  
          
        /*  public static ArrayList<ProductosTaller> ListarProductosTrabajoEjemploMaster(int a) {//productos ejemplo master
@@ -299,7 +334,7 @@ public class InsertarProductosTaller {
         return list;
 }
     public static ArrayList<ProductosTaller> ListarProductosTrabajoEjemploMaster(int a) {//productos ejemplo master
-        return ProdMas("select p.id_pedido,d.descripcion,p.cantidad,decode(p.depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS',13,'MOLDING') AS DEPTO,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') AS FECHA,p.nota from pedidos_trabajos p inner join ejemplos_trabajo t on t.id = p.id  join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado = 1 and t.ID = "+a+" order by p.id_pedido");
+        return ProdMas("select p.id_pedido,d.descripcion,p.cantidad,decode(p.depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS',13,'MOLDING') AS DEPTO,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,to_char(p.fecha,'dd/mm/yyyy hh:mi:ss') AS FECHA,p.nota,decode(p.estado,1,'Confirmado',0,'Sin Confirmar') as confirma from pedidos_trabajos p inner join ejemplos_trabajo t on t.id = p.id  join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado in(1,0)  and t.ID = "+a+" order by p.id_pedido");
     }
     private static ArrayList<ProductosTaller> ProdMas(String sql){
     ArrayList<ProductosTaller> list = new ArrayList<ProductosTaller>();
@@ -317,6 +352,7 @@ public class InsertarProductosTaller {
                  t.setDepartamento(rs.getString("DEPTO"));
                  t.setFechaStrin(rs.getString("FECHA"));
                  t.setNota(rs.getString("NOTA"));
+                 t.setConfirma(rs.getString("confirma"));
                  list.add(t);
             }
             cn.close();
@@ -327,7 +363,7 @@ public class InsertarProductosTaller {
         return list;
 }
     public static ArrayList<ProductosTaller> ListarProductosTrabajoMaster(int a) {//master listado de pedidos
-        return ProdMAster2("select p.id_pedido,p.id_producto,d.descripcion,p.cantidad,decode(p.depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS',13,'MOLDING') AS DEPTO,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') AS FECHA,p.nota from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado = 1 and l.ID_LOTE = "+a+" order by p.id_pedido");
+        return ProdMAster2("select p.id_pedido,p.id_producto,d.descripcion,p.cantidad,decode(p.depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS',13,'MOLDING') AS DEPTO,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,to_char(p.fecha,'dd/mm/yyyy hh:mi:ss') AS FECHA,p.nota,decode(p.estado,0,'Sin Confirmar',1,'Confirmado') as confirma from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto WHERE  p.estado in(1,0) and l.ID_LOTE = "+a+" order by p.id_pedido");
     }
     private static ArrayList<ProductosTaller> ProdMAster2(String sql){
     ArrayList<ProductosTaller> list = new ArrayList<ProductosTaller>();
@@ -346,6 +382,7 @@ public class InsertarProductosTaller {
                  t.setDepartamento(rs.getString("depto"));
                  t.setFechaStrin(rs.getString("FECHA"));
                  t.setIdproducto(rs.getInt("id_producto"));
+                 t.setConfirma(rs.getString("confirma"));
                  list.add(t);
             }
             cn.close();
@@ -357,15 +394,15 @@ public class InsertarProductosTaller {
 }
     //BUSCAR HISTORIAL
      public static ArrayList<ProductosTaller> ListarProductosTrabajoTerminadosAceptado(int a) {
-        return ProdAcep("select p.id_pedido,decode(e.poinsert,null,'N/A',e.poinsert) as poinsert,decode(e.popotrod,null,'N/A',e.popotrod)as popotrod,d.descripcion,p.cantidad,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as FECHA_SOLICITADO,to_char(e.fecha,'dd/mm/yyyy HH:MI:SS') as FECHA_ENTREGA,e.cantidad as CANTIDAD_ENTREGADA,e.po,e.realizado,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,e.nota from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto join entregas_productos e on p.id_pedido = e.id_pedido WHERE p.estado = 2 and l.ID_LOTE ="+a+"order by d.id_producto");
+        return ProdAcep("select p.id_pedido,decode(e.poinsert,null,'N/A',e.poinsert) as poinsert,decode(p.depto,1,'TRANSFORMADORES',3,'STRIP Y POTTING',5,'TESTING') AS DEPTO,decode(e.popotrod,null,'N/A',e.popotrod)as popotrod,d.descripcion,p.cantidad,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as FECHA_SOLICITADO,to_char(e.fecha,'dd/mm/yyyy HH:MI:SS') as FECHA_ENTREGA,e.cantidad as CANTIDAD_ENTREGADA,e.po,e.realizado,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,e.nota,p.nota as nota2 from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto join entregas_productos e on p.id_pedido = e.id_pedido WHERE p.estado = 2 and l.ID_LOTE ="+a+"order by d.id_producto");
     }
      
     public static ArrayList<ProductosTaller> ListarProductosTrabajoTerminadosAceptadoEjemplo(int a) {
-        return ProdAcep("select p.id_pedido,decode(e.poinsert,null,'N/A',e.poinsert) as poinsert,decode(e.popotrod,null,'N/A',e.popotrod)as popotrod,d.descripcion,p.cantidad,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as FECHA_SOLICITADO,to_char(e.fecha,'dd/mm/yyyy HH:MI:SS') as FECHA_ENTREGA,e.cantidad as CANTIDAD_ENTREGADA,e.po,e.realizado,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,e.nota from pedidos_trabajos p inner join ejemplos_trabajo l on p.id = l.id join productos_taller d on d.id_producto = p.id_producto join entregas_productos e on p.id_pedido = e.id_pedido WHERE p.estado = 2 and l.ID ="+a+"order by d.id_producto");
+        return ProdAcep("select p.id_pedido,decode(e.poinsert,null,'N/A',e.poinsert) as poinsert,decode(p.depto,1,'TRANSFORMADORES',3,'STRIP Y POTTING',5,'TESTING') AS DEPTO,decode(e.popotrod,null,'N/A',e.popotrod)as popotrod,d.descripcion,p.cantidad,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as FECHA_SOLICITADO,to_char(e.fecha,'dd/mm/yyyy HH:MI:SS') as FECHA_ENTREGA,e.cantidad as CANTIDAD_ENTREGADA,e.po,e.realizado,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,e.nota,p.nota as nota2 from pedidos_trabajos p inner join ejemplos_trabajo l on p.id = l.id join productos_taller d on d.id_producto = p.id_producto join entregas_productos e on p.id_pedido = e.id_pedido WHERE p.estado = 2 and l.ID ="+a+"order by d.id_producto");
     }
      
     public static ArrayList<ProductosTaller> ListarProductosTrabajoTerminadosAceptadoE(int a) {
-        return ProdAcep("select p.id_pedido,decode(e.poinsert,null,'N/A',e.poinsert) as poinsert,decode(e.popotrod,null,'N/A',e.popotrod)as popotrod,d.descripcion,p.cantidad,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as FECHA_SOLICITADO,to_char(e.fecha,'dd/mm/yyyy HH:MI:SS') as FECHA_ENTREGA,e.cantidad as CANTIDAD_ENTREGADA,e.po,e.realizado,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,e.nota from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto join entregas_productos e on p.id_pedido = e.id_pedido WHERE p.estado = 2 and l.ID ="+a+"order by d.id_producto");
+        return ProdAcep("select p.id_pedido,decode(e.poinsert,null,'N/A',e.poinsert) as poinsert,decode(p.depto,1,'TRANSFORMADORES',3,'STRIP Y POTTING',5,'TESTING') AS DEPTO,decode(e.popotrod,null,'N/A',e.popotrod)as popotrod,d.descripcion,p.cantidad,to_char(p.fecha,'dd/mm/yyyy hh:mm:ss') as FECHA_SOLICITADO,to_char(e.fecha,'dd/mm/yyyy HH:MI:SS') as FECHA_ENTREGA,e.cantidad as CANTIDAD_ENTREGADA,e.po,e.realizado,decode(p.status,1,'EN PROCESO',2,'SOLICITANDO MATERIAL',3,'ENTREGADO',4,'ACEPTADO') AS STATUS,e.nota as nota2,p.nota from pedidos_trabajos p inner join lotes l on p.id_lote = l.id_lote join trabajo t on t.id = l.id join productos_taller d on d.id_producto = p.id_producto join entregas_productos e on p.id_pedido = e.id_pedido WHERE p.estado = 2 and l.ID ="+a+"order by d.id_producto");
     } 
         
     private static ArrayList<ProductosTaller> ProdAcep(String sql){
@@ -389,6 +426,8 @@ public class InsertarProductosTaller {
                  t.setNota(rs.getString("NOTA"));
                  t.setPOInsert(rs.getString("poinsert"));
                  t.setPOPotRod(rs.getString("popotrod"));
+                 t.setNota2(rs.getString("nota2"));
+                 t.setDepartamento(rs.getString("DEPTO"));
                  list.add(t);
             }
             cn.close();
@@ -398,6 +437,8 @@ public class InsertarProductosTaller {
         } 
         return list;
 }
+    
+    
 
 public static ArrayList<ClassTrabajos> ListarEjemplos(String a){
         return SQL2("select id,pn,job,cliente from ejemplos_trabajo where UPPER(PN) LIKE UPPER('"+a+"%')");
@@ -433,7 +474,7 @@ public static ArrayList<ClassTrabajos> ListarEjemplos(String a){
              
             Connection cn = BD.getConnection();
             PreparedStatement ps = null;
-            ps = cn.prepareStatement("select  t.id_pedido, p.descripcion,to_char(t.fecha,'dd/mm/yyyy hh:mm:ss') as fecha  from pedidos_trabajos t inner join productos_taller p on t.id_producto = p.id_producto where t.id_pedido="+a);
+            ps = cn.prepareStatement("select  t.id_pedido, p.descripcion,to_char(t.fecha,'dd/mm/yyyy hh:mi:ss') as fecha  from pedidos_trabajos t inner join productos_taller p on t.id_producto = p.id_producto where t.id_pedido="+a);
             ResultSet rs = ps.executeQuery();
             if (rs.next())
             {
@@ -489,6 +530,81 @@ public static ArrayList<ProductosTaller> ListarProductosTaller() {
             return null;
         } 
         return list;
-    }    
+    } 
+    
+    
+    
+    
+ public static ArrayList<ProductosTaller> ListarPN(String a) {
+        return P("select id,pn,job from trabajo where  UPPER(PN) LIKE UPPER('"+a+"%') order by id");
+    }
+     
+    private static ArrayList<ProductosTaller> P(String sql){
+    ArrayList<ProductosTaller> list = new ArrayList<ProductosTaller>();
+    Connection cn = BD.getConnection();
+        try {
+            ProductosTaller t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ProductosTaller();
+                 t.setIdlote(rs.getInt("id"));
+                 t.setPN(rs.getString("pn"));
+                 t.setJOB(rs.getString("job"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list;
+}    
+    
+public static ArrayList<ProductosTaller> ListarPNHistorial(String a) {
+        return PH("select t.id,t.pn,t.job from trabajo t inner join controlcambios c on t.id = c.id where  UPPER(t.PN) LIKE UPPER('"+a+"%') GROUP BY t.id,t.pn,t.job order by id");
+    }
+     
+    private static ArrayList<ProductosTaller> PH(String sql){
+    ArrayList<ProductosTaller> list = new ArrayList<ProductosTaller>();
+    Connection cn = BD.getConnection();
+        try {
+            ProductosTaller t;
+            Statement stmt = cn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                 t = new ProductosTaller();
+                 t.setIdlote(rs.getInt("id"));
+                 t.setPN(rs.getString("pn"));
+                 t.setJOB(rs.getString("job"));
+                 list.add(t);
+            }
+            cn.close();
+        } catch (Exception e) {
+            System.out.println("error consulta "+e);
+            return null;
+        } 
+        return list;
+}        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }   
      

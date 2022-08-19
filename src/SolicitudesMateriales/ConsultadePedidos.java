@@ -182,7 +182,7 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
     }
      private void RecargarTablaProductos(ArrayList<ProductosTaller> list){
          
-              Object[][] datos = new Object[list.size()][7];
+              Object[][] datos = new Object[list.size()][8];
               int i = 0;
               for(ProductosTaller t : list)
               {
@@ -193,12 +193,13 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
                   datos[i][4] = t.getDepartamento();
                   datos[i][5] = t.getFechaStrin();
                   datos[i][6] = t.getNota();
+                  datos[i][7] = t.getConfirma();
                   i++;
               }    
              PENDIENTES.setModel(new javax.swing.table.DefaultTableModel(
                 datos,
                 new String[]{
-                " ","DESCRIPCION","CANTIDAD","ESTATUS","DEPARTAMENTO","FECHA SOLICITADO","NOTA"      })
+                " ","DESCRIPCION","CANTIDAD","ESTATUS","DEPARTAMENTO","FECHA SOLICITADO","NOTA"," "      })
              {  
                  @Override
              public boolean isCellEditable(int row, int column){
@@ -238,12 +239,13 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
                   datos[i][4] = t.getDepartamento();
                   datos[i][5] = t.getFechaStrin();
                   datos[i][6] = t.getNota();
+                  datos[i][7] = t.getConfirma();
                   i++;
               }    
              PENDIENTESEjemplo.setModel(new javax.swing.table.DefaultTableModel(
                 datos,
                 new String[]{
-                " ","DESCRIPCION","CANTIDAD","ESTATUS","DEPARTAMENTO","FECHA SOLICITUD","NOTA"       })
+                " ","DESCRIPCION","CANTIDAD","ESTATUS","DEPARTAMENTO","FECHA SOLICITUD","NOTA",""})
              {  
                  @Override
              public boolean isCellEditable(int row, int column){
@@ -286,8 +288,21 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setTitle("LISTADO DE PEDIDOS A TALLER");
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(102, 204, 255));
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel1MouseEntered(evt);
+            }
+        });
 
         Trabajos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -319,6 +334,11 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(PENDIENTES);
 
+        PN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                PNMouseClicked(evt);
+            }
+        });
         PN.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 PNKeyReleased(evt);
@@ -364,6 +384,11 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
         jTabbedPane1.addTab("TRABAJOS", jPanel1);
 
         jPanel2.setBackground(new java.awt.Color(102, 204, 255));
+        jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel2MouseClicked(evt);
+            }
+        });
 
         TrabajosEjemplos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -376,6 +401,11 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
         TrabajosEjemplos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TrabajosEjemplosMouseClicked(evt);
+            }
+        });
+        TrabajosEjemplos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                TrabajosEjemplosKeyPressed(evt);
             }
         });
         jScrollPane3.setViewportView(TrabajosEjemplos);
@@ -395,6 +425,11 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
         });
         jScrollPane4.setViewportView(PENDIENTESEjemplo);
 
+        PN1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                PN1MouseClicked(evt);
+            }
+        });
         PN1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PN1ActionPerformed(evt);
@@ -479,7 +514,8 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_PNKeyReleased
 
     private void TrabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TrabajosMouseClicked
-      idlote = (Integer.parseInt(String.valueOf(Trabajos.getModel().getValueAt(Trabajos.getSelectedRow(), 0))));
+      
+        idlote = (Integer.parseInt(String.valueOf(Trabajos.getModel().getValueAt(Trabajos.getSelectedRow(), 0))));
       ListarProductosTrabajos();
     }//GEN-LAST:event_TrabajosMouseClicked
 
@@ -490,6 +526,7 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_PENDIENTESMouseClicked
 
     private void TrabajosEjemplosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TrabajosEjemplosMouseClicked
+        
         idloteejemplo = (Integer.parseInt(String.valueOf(TrabajosEjemplos.getModel().getValueAt(TrabajosEjemplos.getSelectedRow(), 0))));
       ListarProductosTrabajosEjemplos();
     }//GEN-LAST:event_TrabajosEjemplosMouseClicked
@@ -527,6 +564,44 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
     private void PN1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PN1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PN1ActionPerformed
+
+    private void TrabajosEjemplosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TrabajosEjemplosKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TrabajosEjemplosKeyPressed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+       ListarTrabajos();
+       ListarTrabajosEjemplos();
+       System.out.println("3");
+    }//GEN-LAST:event_formMouseClicked
+
+    private void PN1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PN1MouseClicked
+      ListarTrabajos();
+      ListarTrabajosEjemplos();
+      System.out.println("2");
+    }//GEN-LAST:event_PN1MouseClicked
+
+    private void jPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseClicked
+       ListarTrabajos();
+       ListarTrabajosEjemplos();
+        System.out.println("1");
+    }//GEN-LAST:event_jPanel2MouseClicked
+
+    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+       ListarTrabajos();
+       ListarTrabajosEjemplos();
+        System.out.println("1");
+    }//GEN-LAST:event_jPanel1MouseClicked
+
+    private void jPanel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel1MouseEntered
+
+    private void PNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PNMouseClicked
+        ListarTrabajos();
+       ListarTrabajosEjemplos();
+        System.out.println("1");        // TODO add your handling code here:
+    }//GEN-LAST:event_PNMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

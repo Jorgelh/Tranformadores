@@ -19,8 +19,6 @@ import java.util.ArrayList;
  */
 public class InsertarEjemplos {
     
-    
-    
     public static void InsertarEjemplos(ClassTrabajos t) throws SQLException{
         Connection con = BD.getConnection();
         PreparedStatement ps = null;
@@ -47,7 +45,7 @@ public class InsertarEjemplos {
     public static void InsertarProcesoEjemplo(ClassTrabajos t) throws SQLException{
         Connection con = BD.getConnection();
         PreparedStatement ps = null;
-        ps = con.prepareStatement("insert into ejemplos_procesos(id_proceso,id,proceso,comentarios,fechaauto,fecha,cantidad,fechasys,depto,nota) values(ID_PROCESO_EJEMPLO.nextval,?,?,?,?,?,?,sysdate,?,?)");
+        ps = con.prepareStatement("insert into ejemplos_procesos(id_proceso,id,proceso,comentarios,fechaauto,fecha,cantidad,fechasys,depto,nota,realizadopor) values(ID_PROCESO_EJEMPLO.nextval,?,?,?,?,?,?,sysdate,?,?,?)");
         //ps.setInt(1,t.getId_proceso());
         ps.setInt(1, t.getId());
         ps.setString(2, t.getProceso());
@@ -57,6 +55,7 @@ public class InsertarEjemplos {
         ps.setInt(6, t.getCantidad());
         ps.setInt(7, t.getDepartamento());
         ps.setString(8, t.getNota());
+        ps.setInt(9, t.getTrabajadopor());
         ps.executeUpdate();
         con.close();
         ps.close(); 
@@ -188,7 +187,7 @@ public static ClassTrabajos buscarEjemploTrabajo(int a) throws SQLException{
     
     public static ArrayList<ClassTrabajos> ListarProcesoEjemplo(int a) {
                    
-        return Ejemplo("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS',13,'MOLDING') AS DEPTO, nota from EJEMPLOS_PROCESOS where id="+a+" order by id_proceso");
+        return Ejemplo("select proceso,fechaauto,cantidad,comentarios,decode(depto,0,'INFORMATICA',1,'TRANSFORMADORES',2,'INGENIERIA',3,'STRIP Y POTTING',4,'INSPECCION',5,'TESTING',6,'CALIDAD',7,'GERENTE OPERACIONES',8,'BODEGA',9,'RELACION CON EL CLIENTE',10,'TALLER',11,'GERENCIA',12,'CHIPS',13,'MOLDING') AS DEPTO,nota,realizadopor,co.nombres as realizado from EJEMPLOS_PROCESOS ep left join RRHH.alistaempleados co on ep.realizadopor = co.codigo where id="+a+" order by id_proceso");
     }
     private static ArrayList<ClassTrabajos> Ejemplo(String sql){
     ArrayList<ClassTrabajos> list = new ArrayList<ClassTrabajos>();
@@ -205,6 +204,8 @@ public static ClassTrabajos buscarEjemploTrabajo(int a) throws SQLException{
                  b.setComentarios(rs.getString("comentarios"));
                  b.setDepto(rs.getString("depto"));
                  b.setNota(rs.getString("nota"));
+                 b.setTrabajadopor(rs.getInt("realizadopor"));
+                 b.setRealizadopor(rs.getString("realizado"));
                  list.add(b);
             }
             cn.close();
@@ -345,5 +346,45 @@ public static ClassTrabajos buscarTrabajoEditarEjemplo(int a) throws SQLExceptio
             return false;
         }
     }  
-            
+ 
+        
+        
+        
+ public static ClassTrabajos  buscarEmpleado(int id) throws SQLException {
+        return buscarEmple(id, null);
+    }    
+ public static ClassTrabajos buscarEmple(int id,ClassTrabajos p) throws SQLException {
+        Connection cnn = BD_RECURSOS.getConnection();
+        
+        try {
+            PreparedStatement ps = null;
+            ps = cnn.prepareStatement("select ID_LISTAEMPLEADOS,nombres from alistaempleados where codigo = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                if (p == null) {
+                    p = new ClassTrabajos(){
+                    };
+                }
+                p.setId_listaEmpleados(rs.getInt("ID_LISTAEMPLEADOS"));
+                p.setNombres(rs.getString("NOMBRES"));
+                cnn.close();
+                ps.close();
+                return p;
+            }
+
+        } catch (Exception e) {
+               System.err.println("errroooooorrr"+e);    
+        }
+        
+        return null;
+
+    }          
+        
+        
+        
+        
+        
+        
+        
 }

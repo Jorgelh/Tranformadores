@@ -29,7 +29,7 @@ import javax.swing.table.TableColumn;
  *
  * @author jluis
  */
-public class RecoridosEjemplos extends javax.swing.JInternalFrame {
+public class RecoridosEjemplosCombo extends javax.swing.JInternalFrame {
 
     int id;
     int id_proceso;
@@ -42,13 +42,13 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
     /**
      * Creates new form Recoridos
      */
-    public RecoridosEjemplos() {
+    public RecoridosEjemplosCombo() {
         initComponents();
         ListarTrabajos();
-        PROCESO.setEnabled(false);
+        SiguientePro.setEnabled(false);
         FECHA.setEnabled(false);
         CANTIDAD.setEnabled(false);
-        COMENTARIO.setEnabled(false);
+        ProRealizado.setEnabled(false);
         Bagregar.setEnabled(false);
         trabajado.setEnabled(false);
 
@@ -84,11 +84,11 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
                     ClassTrabajos t = new ClassTrabajos();
                     t.setId(id);
                     //t.setId_proceso(id_proceso);
-                    t.setProceso(PROCESO.getText());
+                    t.setProceso(SiguientePro.getSelectedItem().toString());
                     t.setCantidad(Integer.parseInt(CANTIDAD.getText()));
                     t.setFecha1(FECHA.getDate());
                     t.setFecha(fechaAuto.getText());
-                    t.setComentarios(COMENTARIO.getText());
+                    t.setComentarios(ProRealizado.getSelectedItem().toString());
                     t.setDepartamento(depto);
                     t.setNota(nota.getText());
                     t.setTrabajadopor(Integer.parseInt(trabajado.getText()));
@@ -137,15 +137,15 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
 
     public void limpiarproce() {
 
-        PROCESO.setText("");
+        SiguientePro.setSelectedItem("Seleccionar...");
         FECHA.setDate(null);
         CANTIDAD.setText("");
-        COMENTARIO.setText("");
+        ProRealizado.setSelectedItem("Seleccionar...");
         fechaAuto.setText("");
-        PROCESO.setEnabled(false);
+        SiguientePro.setEnabled(false);
         FECHA.setEnabled(false);
         CANTIDAD.setEnabled(false);
-        COMENTARIO.setEnabled(false);
+        ProRealizado.setEnabled(false);
         Bagregar.setEnabled(false);
         nota.setText("");
         trabajado.setText("");
@@ -191,7 +191,7 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
         }//TALLE
         else if (a.equals("Sotano")) {
             depto = 10;
-        }//SOTANO */
+        }//SOTANO 
         /*else if (a.equals("Sotano")) {
             depto = 13;
         }//MOLDING*/
@@ -256,15 +256,15 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
         jLabel16 = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        PROCESO = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        COMENTARIO = new javax.swing.JTextField();
         Bagregar = new javax.swing.JButton();
         fechaAuto = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         CANTIDAD = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         trabajado = new javax.swing.JTextField();
+        ProRealizado = new javax.swing.JComboBox<>();
+        SiguientePro = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
 
         setClosable(true);
         setTitle("PROCESO DE EJEMPLOS");
@@ -598,23 +598,6 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel13.setText("SIGUIENTE PROCESO");
 
-        PROCESO.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        PROCESO.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PROCESOActionPerformed(evt);
-            }
-        });
-
-        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel15.setText("PROCESO REALIZADO");
-
-        COMENTARIO.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        COMENTARIO.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                COMENTARIOActionPerformed(evt);
-            }
-        });
-
         Bagregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/save2.png"))); // NOI18N
         Bagregar.setText("AGREGAR");
         Bagregar.addActionListener(new java.awt.event.ActionListener() {
@@ -657,19 +640,37 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
             }
         });
 
+        ProRealizado.setEditable(true);
+        ProRealizado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        ProRealizado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Preparacion de Dwg", "Dwg en Bodega", "Dwg en Transormadores", "Dwg en Inspeccion Visual" }));
+        ProRealizado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ProRealizadoActionPerformed(evt);
+            }
+        });
+
+        SiguientePro.setEditable(true);
+        SiguientePro.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        SiguientePro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Preparacion de Dwg", "Dwg en Bodega", "Dwg en Transormadores", "Dwg en Inspeccion Visual" }));
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel15.setText("PROCESO REALIZADO");
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Bagregar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel13)
-                        .addComponent(jLabel15)
-                        .addComponent(PROCESO, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
-                        .addComponent(COMENTARIO)))
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addGap(210, 210, 210)
+                            .addComponent(Bagregar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(SiguientePro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ProRealizado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel15))
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
@@ -689,20 +690,20 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel11))
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(PROCESO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CANTIDAD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CANTIDAD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ProRealizado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel12))
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(COMENTARIO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(trabajado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(trabajado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SiguientePro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Bagregar)
@@ -775,7 +776,7 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -798,7 +799,7 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
 
     private void BagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BagregarActionPerformed
 
-        if (PROCESO.getText().compareTo("") != 0
+        if (!SiguientePro.getSelectedItem().toString().equalsIgnoreCase("Seleccionar...") && !ProRealizado.getSelectedItem().toString().equalsIgnoreCase("Seleccionar...")
                 && CANTIDAD.getText().compareTo("") != 0
                 && FECHA.getDate() != null && trabajado.getText().compareTo("") != 0) {
 
@@ -828,18 +829,13 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
         llenacuainformacion();
         FechasJdate();
         Cfecha();
-        PROCESO.setEnabled(true);
+        SiguientePro.setEnabled(true);
         FECHA.setEnabled(true);
         CANTIDAD.setEnabled(true);
-        COMENTARIO.setEnabled(true);
+        ProRealizado.setEnabled(true);
         Bagregar.setEnabled(true);
         trabajado.setEnabled(true);
     }//GEN-LAST:event_trabMouseClicked
-
-    private void PROCESOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PROCESOActionPerformed
-        COMENTARIO.requestFocus();
-        //Cfecha();
-    }//GEN-LAST:event_PROCESOActionPerformed
 
     private void CANTIDADActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CANTIDADActionPerformed
         trabajado.requestFocus();
@@ -847,10 +843,6 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
 
     private void trabAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_trabAncestorMoved
     }//GEN-LAST:event_trabAncestorMoved
-
-    private void COMENTARIOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_COMENTARIOActionPerformed
-        CANTIDAD.requestFocus();
-    }//GEN-LAST:event_COMENTARIOActionPerformed
 
     private void FECHAMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FECHAMouseClicked
 
@@ -889,6 +881,18 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
             evt.consume();
         }
     }//GEN-LAST:event_CANTIDADKeyTyped
+
+    private void ProRealizadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProRealizadoActionPerformed
+       
+
+        if(ProRealizado.getSelectedItem().toString().equalsIgnoreCase("Preparacion de Dwg"))
+         {
+          SiguientePro.setSelectedItem("Dwg en Bodega"); //Revision de Material
+          
+         }
+        
+        
+    }//GEN-LAST:event_ProRealizadoActionPerformed
 
     private void ListarTrabajos() {
         ArrayList<ClassTrabajos> result = InsertarEjemplos.ListarEjemplos(PN.getText(), JOB.getText());
@@ -986,21 +990,23 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RecoridosEjemplos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecoridosEjemplosCombo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RecoridosEjemplos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecoridosEjemplosCombo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RecoridosEjemplos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecoridosEjemplosCombo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RecoridosEjemplos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecoridosEjemplosCombo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RecoridosEjemplos().setVisible(true);
+                new RecoridosEjemplosCombo().setVisible(true);
             }
         });
     }
@@ -1010,7 +1016,6 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField CANTIDAD;
     private javax.swing.JTextField CANTIDADINFO;
     private javax.swing.JTextField CLIENTEINFO;
-    private javax.swing.JTextField COMENTARIO;
     private javax.swing.JTextField ESTANDARINFO;
     private com.toedter.calendar.JDateChooser FECHA;
     private javax.swing.JTextField JOB;
@@ -1018,8 +1023,9 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField PN;
     private javax.swing.JTextField PNINFO;
     private javax.swing.JTextField PRIORIDAD;
-    private javax.swing.JTextField PROCESO;
+    private javax.swing.JComboBox<String> ProRealizado;
     private javax.swing.JTextField REVISIONINFO;
+    private javax.swing.JComboBox<String> SiguientePro;
     private javax.swing.JTable TablaPro;
     private javax.swing.JLabel ejemploaprobado;
     private javax.swing.JTextField fechaAuto;
@@ -1067,7 +1073,7 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
             CANTIDADINFO.setText(String.valueOf(c.getQtyproduccion()));
             REVISIONINFO.setText(c.getRevision());
             PRIORIDAD.setText(c.getPrioridadStrin());
-            PROCESO.requestFocus();
+            ProRealizado.requestFocus();
             if (c.getEstadoeje() == 3 || c.getEstadoeje() == 4) {
                 ejemploaprobado.setText("EJEMPLO YA APROBADO");
             }
