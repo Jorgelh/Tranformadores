@@ -513,7 +513,7 @@ public class ProcesosTransCombo extends javax.swing.JInternalFrame {
 
         ProRealizado.setEditable(true);
         ProRealizado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        ProRealizado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Preparacion de Dwg", "Dwg en Bodega", "Dwg en Transormadores", "Dwg en Inspeccion Visual" }));
+        ProRealizado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Preparacion de Dwg", "Dwg en Bodega", "Dwg en Transformadores", "Dwg en Inspeccion Visual" }));
         ProRealizado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ProRealizadoActionPerformed(evt);
@@ -522,7 +522,7 @@ public class ProcesosTransCombo extends javax.swing.JInternalFrame {
 
         SiguientePro.setEditable(true);
         SiguientePro.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        SiguientePro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Preparacion de Dwg", "Dwg en Bodega", "Dwg en Transormadores", "Dwg en Inspeccion Visual" }));
+        SiguientePro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Preparacion de Dwg", "Dwg en Bodega", "Dwg en Transformadores", "Dwg en Inspeccion Visual" }));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel15.setText("PROCESO REALIZADO");

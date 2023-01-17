@@ -314,7 +314,7 @@ public class InicioSolicItudesProductosAtaller extends javax.swing.JInternalFram
     public void selectusuario() {
         String a = System.getProperty("user.name");//usar usuario de windows
         if (a.equals("jluis")) {
-            depto = 10;  //cambio en HistorialStatus,InicioSolicItudesProductosAtaller,Status
+            depto = 1;  //cambio en HistorialStatus,InicioSolicItudesProductosAtaller,Status
         } //INFORMATICA
         else if (a.equals("ehernandez")) {
             depto = 1;

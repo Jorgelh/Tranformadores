@@ -235,8 +235,9 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
         jPanel5 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         REVISIONINFO = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
         CANTIDADINFO = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        CANTIDADCLIENTEINFO = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         CLIENTEINFO = new javax.swing.JTextField();
@@ -390,12 +391,16 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
         REVISIONINFO.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         REVISIONINFO.setForeground(new java.awt.Color(0, 102, 255));
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setText("CANTIDAD");
-
         CANTIDADINFO.setEditable(false);
         CANTIDADINFO.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         CANTIDADINFO.setForeground(new java.awt.Color(0, 102, 255));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jLabel9.setText("CANTIDAD /   QTY CLIENTE");
+
+        CANTIDADCLIENTEINFO.setEditable(false);
+        CANTIDADCLIENTEINFO.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        CANTIDADCLIENTEINFO.setForeground(new java.awt.Color(0, 102, 255));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -405,12 +410,15 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(REVISIONINFO)
-                    .addComponent(CANTIDADINFO)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(CANTIDADINFO, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(CANTIDADCLIENTEINFO))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(jLabel7))
-                        .addGap(0, 86, Short.MAX_VALUE)))
+                            .addComponent(jLabel9))
+                        .addGap(0, 5, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -420,11 +428,13 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(REVISIONINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(CANTIDADINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CANTIDADINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CANTIDADCLIENTEINFO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -1008,6 +1018,7 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Bagregar;
     private javax.swing.JTextField CANTIDAD;
+    private javax.swing.JTextField CANTIDADCLIENTEINFO;
     private javax.swing.JTextField CANTIDADINFO;
     private javax.swing.JTextField CLIENTEINFO;
     private javax.swing.JTextField COMENTARIO;
@@ -1036,8 +1047,8 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
@@ -1067,6 +1078,7 @@ public class RecoridosEjemplos extends javax.swing.JInternalFrame {
             CANTIDADINFO.setText(String.valueOf(c.getQtyproduccion()));
             REVISIONINFO.setText(c.getRevision());
             PRIORIDAD.setText(c.getPrioridadStrin());
+            CANTIDADCLIENTEINFO.setText(String.valueOf(c.getQtycliente()));
             PROCESO.requestFocus();
             if (c.getEstadoeje() == 3 || c.getEstadoeje() == 4) {
                 ejemploaprobado.setText("EJEMPLO YA APROBADO");

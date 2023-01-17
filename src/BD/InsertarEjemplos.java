@@ -130,7 +130,7 @@ public static ArrayList<ClassTrabajos> ListarProcesoEjemplos(int a) {
              
             Connection cn = BD.getConnection();
             PreparedStatement ps = null;
-            ps = cn.prepareStatement("select id,pn,job,cliente,decode(estandar,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as estandar,qtyproduccion,revision,decode(PRIORIDAD,0,' ',1,'URGENTE') AS PRIORIDAD,estado from EJEMPLOS_TRABAJO where id ="+a);
+            ps = cn.prepareStatement("select id,pn,job,cliente,decode(estandar,1,'FUJI',2,'INGENIERIA',3,'MIL-PRF-27',4,'MIL-STD-981',5,'MIL-STD-981 PRE-CAP',6,'MIL-STD-981 URGENTE',7,'MIL-STD-981 X-RAY') as estandar,qtyproduccion,revision,decode(PRIORIDAD,0,' ',1,'URGENTE') AS PRIORIDAD,estado,QTYCLIENTE from EJEMPLOS_TRABAJO where id ="+a);
             ResultSet rs = ps.executeQuery();
             if (rs.next())
             {
@@ -147,6 +147,7 @@ public static ArrayList<ClassTrabajos> ListarProcesoEjemplos(int a) {
                c.setRevision(rs.getString("revision"));
                c.setPrioridadStrin(rs.getString("PRIORIDAD"));
                c.setEstadoeje(rs.getInt("estado"));
+               c.setQtycliente(rs.getInt("QTYCLIENTE"));
             }
             cn.close();
             ps.close();

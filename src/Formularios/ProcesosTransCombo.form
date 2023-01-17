@@ -855,7 +855,7 @@
                         <StringItem index="0" value="Seleccionar..."/>
                         <StringItem index="1" value="Preparacion de Dwg"/>
                         <StringItem index="2" value="Dwg en Bodega"/>
-                        <StringItem index="3" value="Dwg en Transormadores"/>
+                        <StringItem index="3" value="Dwg en Transformadores"/>
                         <StringItem index="4" value="Dwg en Inspeccion Visual"/>
                       </StringArray>
                     </Property>
@@ -878,7 +878,7 @@
                         <StringItem index="0" value="Seleccionar..."/>
                         <StringItem index="1" value="Preparacion de Dwg"/>
                         <StringItem index="2" value="Dwg en Bodega"/>
-                        <StringItem index="3" value="Dwg en Transormadores"/>
+                        <StringItem index="3" value="Dwg en Transformadores"/>
                         <StringItem index="4" value="Dwg en Inspeccion Visual"/>
                       </StringArray>
                     </Property>

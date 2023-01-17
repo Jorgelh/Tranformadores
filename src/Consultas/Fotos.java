@@ -28,7 +28,7 @@ public class Fotos extends javax.swing.JInternalFrame {
     Vector imagenes;
     int index = 0;
     String folder = "";
-
+    String carpeta;
     public Fotos() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -44,13 +44,14 @@ public class Fotos extends javax.swing.JInternalFrame {
     }
 
      void cargarAlbum() {
-
+        carpeta = "CUSTOM";
         FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File file, String name) {
                 if (name.endsWith(".jpg")) {
                     return true;
                 } else {
+                    
                     return false;
                 }
             }
@@ -58,7 +59,7 @@ public class Fotos extends javax.swing.JInternalFrame {
 
         imagenes.clear();
         index = 0;
-        String album = ("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\"+txtPN.getText());
+        String album = ("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\CUSTOM\\"+txtPN.getText());
         File albumCarpeta = new File(album);
         folder = albumCarpeta.getName();
         File[] fotos = albumCarpeta.listFiles(filter);
@@ -72,7 +73,51 @@ public class Fotos extends javax.swing.JInternalFrame {
                         imagenes.add(fotos[i].getName());
                     }
                 }
-                jLabel1.setIcon(new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\" + folder + "\\" + (String) imagenes.elementAt(0)).getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
+                jLabel1.setIcon(new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\CUSTOM\\" + folder + "\\" + (String) imagenes.elementAt(0)).getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
+            } else {
+               
+               jLabel1.setIcon(new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\Master Document\\No_Image_Available.jpg").getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
+                return;
+            }
+        } else {
+             cargarAlbum2();
+            //jLabel1.setIcon(new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\Master Document\\No_Image_Available.jpg").getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
+
+        }
+    }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     
+     void cargarAlbum2() {
+        carpeta = "CATALOG";
+        FilenameFilter filter = new FilenameFilter() {
+            @Override
+            public boolean accept(File file, String name) {
+                if (name.endsWith(".jpg")) {
+                    return true;
+                } else {
+                    
+                    return false;
+                }
+            }
+        };
+
+        imagenes.clear();
+        index = 0;
+        String album = ("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\CATALOG\\"+txtPN.getText());
+        File albumCarpeta = new File(album);
+        folder = albumCarpeta.getName();
+        File[] fotos = albumCarpeta.listFiles(filter);
+        if (fotos != null) {
+            if (fotos.length != 0) {
+                adelante.requestFocus();
+                for (int i = 0;
+                        i < fotos.length;
+                        i++) {
+                    if (fotos[i].isFile()) {
+                        imagenes.add(fotos[i].getName());
+                    }
+                }
+                jLabel1.setIcon(new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\CATALOG\\" + folder + "\\" + (String) imagenes.elementAt(0)).getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
             } else {
                 jLabel1.setIcon(new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\Master Document\\No_Image_Available.jpg").getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
                 return;
@@ -83,10 +128,14 @@ public class Fotos extends javax.swing.JInternalFrame {
         }
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
+     
+     
+     
     void fotoAdelante() {
         if ((index + 1) < imagenes.size()) {
             index++;
-            ImageIcon imagen = (new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\" + folder + "\\" + (String) imagenes.elementAt(index)).getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
+            ImageIcon imagen = (new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\"+carpeta+"\\" + folder + "\\" + (String) imagenes.elementAt(index)).getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
             jLabel1.setIcon(imagen);
         } else {
             atras.requestFocus();
@@ -97,7 +146,7 @@ public class Fotos extends javax.swing.JInternalFrame {
     void fotoAtras() {
         if ((index - 1) > -1) {
             index--;
-            ImageIcon imagen = (new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\" + folder + "\\" + (String) imagenes.elementAt(index)).getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
+            ImageIcon imagen = (new ImageIcon(((new ImageIcon("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\"+carpeta+"\\" + folder + "\\" + (String) imagenes.elementAt(index)).getImage()).getScaledInstance(500, 400, java.awt.Image.SCALE_SMOOTH))));
             jLabel1.setIcon(imagen);
         } else {
             adelante.requestFocus();
@@ -313,21 +362,23 @@ public class Fotos extends javax.swing.JInternalFrame {
         imagenes.clear();
     }//GEN-LAST:event_jButton1ActionPerformed
     private void FotosbotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FotosbotonActionPerformed
-        String letra = "\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\"+ txtPN.getText();
+        String letra = "\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\CUSTOM\\"+ txtPN.getText();
         File Dir = new File(letra);
         File[] lista_Archivos = Dir.listFiles();
         System.out.println("carpeta" + lista_Archivos);
         try {
             if (lista_Archivos != null) {
-                Desktop.getDesktop().open(new File("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\" + txtPN.getText()));
+                Desktop.getDesktop().open(new File("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\CUSTOM\\" + txtPN.getText()));
             } else {
-                Desktop.getDesktop().open(new File("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)"));
+                Desktop.getDesktop().open(new File("\\\\192.168.0.2\\Compartida Produccion\\FOTO DE PIEZAS (desde 2019)\\CUSTOM\\"));
             }
         } catch (IOException ex) {
             Logger.getLogger(Fotos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_FotosbotonActionPerformed
     private void txtPNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPNActionPerformed
+        
+        
         cargarAlbum();
     }//GEN-LAST:event_txtPNActionPerformed
 

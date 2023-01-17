@@ -228,7 +228,7 @@ public class ConsultadePedidos extends javax.swing.JInternalFrame {
     }
      private void RecargarTablaProductoseje(ArrayList<ProductosTaller> list){
          
-              Object[][] datos = new Object[list.size()][7];
+              Object[][] datos = new Object[list.size()][8];
               int i = 0;
               for(ProductosTaller t : list)
               {
